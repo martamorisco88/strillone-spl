@@ -1,0 +1,47 @@
+<resources>
+    <string name="app_name">Strillone</string>
+    <string name="title_activity_main">Strillone</string>
+    
+    <string name="menu_settings">Settings</string>
+    <string name="menu_beta">Attiva/disattiva giornali di prova.</string>
+    
+    <string name="init_ok">Inizializzazione avvenuta con successo.</string>
+    <string name="init_ko">Errore nell\'inizializzazione.</string>
+    <string name="nav_home">Inizio navigazione</string>
+    <string name="nav_enter_section">Sei entrato nella sezione\u0020</string>
+    <string name="nav_closing_app">Chiusura applicazione.</string>
+    <string name="nav_read_success">\u0020è pronto per la lettura.</string>
+    <string name="nav_go_testate">Navigazione testate.</string>
+    <string name="nav_go_sezioni">Navigazione sezioni.</string>
+    
+    <string name="nav_first_header">Sei alla prima testata.</string>
+    <string name="nav_last_header">Sei all\'ultima testata.</string>
+    <string name="nav_use_lower_button_start_navigation_headers">Usa il pulsante in basso a destra per scorrere le testate.</string>
+    
+    <string name="nav_first_sezione">Sei alla prima sezione.</string>
+    <string name="nav_last_sezione">Sei all\'ultima sezione.</string>
+    <string name="nav_use_lower_button_start_navigation_sezioni">Usa il pulsante in basso a destra per scorrere le sezioni.</string>
+    
+    <string name="nav_first_articolo">Sei al primo articolo.</string>
+    <string name="nav_last_articolo">Sei all\'ultimo articolo.</string>
+    <string name="nav_use_lower_button_start_navigation_articoli">Usa il pulsante in basso a destra per scorrere gli articoli.</string>
+       
+    <string name="connecting_headers">Lettura testate&#8230;</string>
+    <string name="connecting_newspaper">Lettura \"%s\"&#8230;</string>
+    <string name="connecting_error">Errore di connessione con il server.</string>
+    <string name="connecting_error_reading_newspaper">Errore di lettura testata.</string>
+    
+    <string name="help_text">Strillone è un\'applicazione di Informatici Senza Frontiere che consente di ascoltare, sul proprio smartphone, le notizie del proprio giornale preferito mediante la sintesi vocale integrata. Utilizzare Strillone è facile e veloce. Tenendo il tuo telefono o tablet tra le mani, identifica i quattro angoli dello schermo. Ad ognuno di essi è associata un\'azione. Angolo superiore sinistro. Tocca brevemente questo angolo per tornare al livello superiore. Se, ad esempio, stai navigando gli articoli, premendo questo angolo puoi interrompere la lettura dell\'articolo. Premendolo nuovamente puoi tornare alle sezioni del giornale, e così via. Se vuoi chiudere Strillone, premi a lungo questo pulsante e l\'applicazione si chiuderà. Angolo inferiore sinistro. Tocca brevemente questo angolo per scendere al livello successivo. Se, ad esempio, stai navigando le sezioni del giornale, premendo questo angolo puoi entrare nella lista degli articoli della sezione scelta. Premendolo nuovamente puoi avviare la lettura dell\'articolo di interesse. Se vuoi ascoltare nuovamente questa guida, premi a lungo questo pulsante. Angolo superiore destro. Tocca brevemente questo angolo per passare da una sezione o da un articolo al precedente. Angolo inferiore destro. Tocca brevemente questo angolo per passare da una sezione o da un articolo al successivo. Per riascoltare questa guida, premi a lungo l\'angolo inferiore sinistro.</string>
+
+	<string name="cdupperleft">Sali</string>
+	<string name="cdupperright">Precedente</string>
+	<string name="cdlowerleft">Entra</string>
+	<string name="cdlowerright">Successivo</string>
+	
+	<string name="pos_current">Posizione corrente.\u0020</string>
+	<string name="pos_no_header_selected">Nessuna testata selezionata.</string>
+	<string name="pos_no_section_selected">Nessuna sezione selezionata.</string>
+	<string name="pos_section_selected">Sezione: %s.\u0020</string>
+	<string name="pos_no_article_selected">Nessun articolo selezionato.</string>
+	<string name="pos_article_selected">Articolo: %s.</string>
+</resources>
