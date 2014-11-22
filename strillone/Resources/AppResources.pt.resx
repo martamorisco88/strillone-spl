@@ -1,0 +1,255 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ResourceFlowDirection" xml:space="preserve">
+    <value>LeftToRight</value>
+    <comment>Controls the FlowDirection for all elements in the RootFrame. Set to the traditional direction of this resource file's language</comment>
+  </data>
+  <data name="ResourceLanguage" xml:space="preserve">
+    <value>pt</value>
+    <comment>Controls the Language and ensures that the font for all elements in the RootFrame aligns with the app's language. Set to the language code of this resource file's language.</comment>
+  </data>
+  <data name="ApplicationTitle" xml:space="preserve">
+    <value>APPLICAZIONE</value>
+  </data>
+  <data name="AppBarButtonText" xml:space="preserve">
+    <value>aggiungi</value>
+  </data>
+  <data name="AppBarMenuItemText" xml:space="preserve">
+    <value>Voce di menu</value>
+  </data>
+  <data name="SuggestionOnArticle" xml:space="preserve">
+    <value>você usar o botão no canto inferior direito para percorrer os itens</value>
+  </data>
+  <data name="SuggestionOnSection" xml:space="preserve">
+    <value>Use o botão no canto inferior direito para percorrer as seções</value>
+  </data>
+  <data name="SuggestionOnTitle" xml:space="preserve">
+    <value>Use o botão no canto inferior direito para percorrer os jornais</value>
+  </data>
+  <data name="loading" xml:space="preserve">
+    <value>Carregando dados...</value>
+  </data>
+  <data name="noTitles" xml:space="preserve">
+    <value>Há jornais em seu idioma 
+Há jornais em seu idioma</value>
+  </data>
+  <data name="EnterSezione" xml:space="preserve">
+    <value>Está inscrita na casa</value>
+  </data>
+  <data name="ErrorServer" xml:space="preserve">
+    <value>Erro ao conectar-se ao servidor</value>
+  </data>
+  <data name="StartEdizioni" xml:space="preserve">
+    <value>Consulta edição do jornal</value>
+  </data>
+  <data name="StartNavigazione" xml:space="preserve">
+    <value>iniciar consulta</value>
+  </data>
+  <data name="StartSezioni" xml:space="preserve">
+    <value>consulta das seções</value>
+  </data>
+  <data name="SuggestionOnPositionArticolo" xml:space="preserve">
+    <value>Você está no primeiro item</value>
+  </data>
+  <data name="SuggestionOnPositionLastArticolo" xml:space="preserve">
+    <value>Você é a última  item</value>
+  </data>
+  <data name="SuggestionOnPositionLastSezione" xml:space="preserve">
+    <value>Você é a última seção</value>
+  </data>
+  <data name="SuggestionOnPositionLastTestata" xml:space="preserve">
+    <value>Você é o último jornal</value>
+  </data>
+  <data name="SuggestionOnPositionSezione" xml:space="preserve">
+    <value>Você é a primeira seção</value>
+  </data>
+  <data name="SuggestionOnPositionTestata" xml:space="preserve">
+    <value>Você é o primeiro jornal</value>
+  </data>
+  <data name="TestataReady" xml:space="preserve">
+    <value>pronto para leitura</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>Strillone é uma aplicação de Informatici senza frontiere, que permite ouvir as notícias do seu jornal favorito no seu smartphone através da síntese de voz integrado . Use Strillone é fácil e rápido , mantendo o seu telefone ou tablet em suas mãos, identifica os quatro cantos da tela, cada um deles está associado a uma ação. Canto superior esquerdo : Toque brevemente este canto para retornar ao nível superior. Se, por exemplo , você escolheu os itens, prima este ângulo que você pode parar de ler este artigo . Apertando-o novamente, você pode voltar para as seções do jornal, e assim por diante . Se você quiser fechar Strillone , pressione e segure este botão eo aplicativo será fechado. Canto superior direito : Toque brevemente este canto para passar de uma seção ou um artigo com o ano anterior . Canto inferior direito : Toque brevemente este canto para passar de uma seção ou um artigo para a próxima. Canto inferior esquerdo : Toque brevemente este canto para ir para baixo para o próximo nível . Se, por exemplo , você escolheu as seções do jornal , pressionar este ângulo que você pode entrar na lista de artigos na seção escolhida. Apertando-o novamente, você pode começar a ler o artigo de interesse. Se você quiser ouvir novamente este prêmios de orientação por voz ao longo do canto inferior esquerdo.</value>
+  </data>
+  <data name="ExitApp" xml:space="preserve">
+    <value>Aplicação de fechar</value>
+  </data>
+  <data name="EditionStamp" xml:space="preserve">
+    <value>edição do</value>
+  </data>
+  <data name="Mese1" xml:space="preserve">
+    <value>Janeiro</value>
+  </data>
+  <data name="Mese10" xml:space="preserve">
+    <value>Outubro </value>
+  </data>
+  <data name="Mese11" xml:space="preserve">
+    <value> Novembro </value>
+  </data>
+  <data name="Mese12" xml:space="preserve">
+    <value> Dezembro</value>
+  </data>
+  <data name="Mese2" xml:space="preserve">
+    <value>Fevereiro</value>
+  </data>
+  <data name="Mese3" xml:space="preserve">
+    <value>Março</value>
+  </data>
+  <data name="Mese4" xml:space="preserve">
+    <value>Abril </value>
+  </data>
+  <data name="Mese5" xml:space="preserve">
+    <value>Maio</value>
+  </data>
+  <data name="Mese6" xml:space="preserve">
+    <value>Junho </value>
+  </data>
+  <data name="Mese7" xml:space="preserve">
+    <value> Julho </value>
+  </data>
+  <data name="Mese8" xml:space="preserve">
+    <value> Agosto </value>
+  </data>
+  <data name="Mese9" xml:space="preserve">
+    <value>Setembro </value>
+  </data>
+  <data name="SuggestionBtnEntra" xml:space="preserve">
+    <value>entra </value>
+  </data>
+  <data name="SuggestionBtnPrecedente" xml:space="preserve">
+    <value>prévio</value>
+  </data>
+  <data name="SuggestionBtnSali" xml:space="preserve">
+    <value>sais </value>
+  </data>
+  <data name="SuggestionBtnSuccessivo" xml:space="preserve">
+    <value>próximo</value>
+  </data>
+  <data name="NoNodeSelectedArticolo" xml:space="preserve">
+    <value>Você não selecionou nenhum item</value>
+  </data>
+  <data name="NoNodeSelectedSezione" xml:space="preserve">
+    <value>Você não selecionou nenhum seção</value>
+  </data>
+  <data name="NoNodeSelectedTestata" xml:space="preserve">
+    <value>Você não selecionou nenhum  jornal</value>
+  </data>
+</root>

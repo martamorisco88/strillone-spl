@@ -1,0 +1,78 @@
+c:\users\francesca\documents\visual studio 2012\Projects\strillone\strillone\Bin\Debug\Assets\ApplicationIcon.png
+c:\users\francesca\documents\visual studio 2012\Projects\strillone\strillone\Bin\Debug\Assets\Tiles\FlipCycleTileLarge.png
+c:\users\francesca\documents\visual studio 2012\Projects\strillone\strillone\Bin\Debug\Assets\Tiles\FlipCycleTileMedium.png
+c:\users\francesca\documents\visual studio 2012\Projects\strillone\strillone\Bin\Debug\Assets\Tiles\FlipCycleTileSmall.png
+c:\users\francesca\documents\visual studio 2012\Projects\strillone\strillone\Bin\Debug\Assets\Tiles\IconicTileMediumLarge.png
+c:\users\francesca\documents\visual studio 2012\Projects\strillone\strillone\Bin\Debug\Assets\Tiles\IconicTileSmall.png
+c:\users\francesca\documents\visual studio 2012\Projects\strillone\strillone\Bin\Debug\strillone.dll
+c:\users\francesca\documents\visual studio 2012\Projects\strillone\strillone\Bin\Debug\strillone.pdb
+c:\users\francesca\documents\visual studio 2012\Projects\strillone\strillone\Bin\Debug\AppManifest.xaml
+c:\users\francesca\documents\visual studio 2012\Projects\strillone\strillone\Bin\Debug\Properties\WMAppManifest.xml
+c:\users\francesca\documents\visual studio 2012\Projects\strillone\strillone\Bin\Debug\strillone_Debug_AnyCPU.xap
+c:\users\francesca\documents\visual studio 2012\Projects\strillone\strillone\obj\Debug\App.g.cs
+c:\users\francesca\documents\visual studio 2012\Projects\strillone\strillone\obj\Debug\MainPage.g.cs
+c:\users\francesca\documents\visual studio 2012\Projects\strillone\strillone\obj\Debug\strillone.g.resources
+c:\users\francesca\documents\visual studio 2012\Projects\strillone\strillone\obj\Debug\strillone.Resources.AppResources.resources
+c:\users\francesca\documents\visual studio 2012\Projects\strillone\strillone\obj\Debug\strillone.csproj.GenerateResource.Cache
+c:\users\francesca\documents\visual studio 2012\Projects\strillone\strillone\obj\Debug\strillone.dll
+c:\users\francesca\documents\visual studio 2012\Projects\strillone\strillone\obj\Debug\strillone.pdb
+c:\users\francesca\documents\visual studio 2012\Projects\strillone\strillone\obj\Debug\XapCacheFile.xml
+C:\Users\francesca\documents\visual studio 2012\Projects\strillone\strillone\obj\Debug\ExtendedSplashScreen.g.cs
+C:\Users\francesca\documents\visual studio 2012\Projects\strillone\strillone\Bin\Debug\en\strillone.resources.dll
+C:\Users\francesca\documents\visual studio 2012\Projects\strillone\strillone\Bin\Debug\fr\strillone.resources.dll
+C:\Users\francesca\documents\visual studio 2012\Projects\strillone\strillone\obj\Debug\strillone.Resources.AppResources.en.resources
+C:\Users\francesca\documents\visual studio 2012\Projects\strillone\strillone\obj\Debug\strillone.Resources.AppResources.fr.resources
+C:\Users\francesca\documents\visual studio 2012\Projects\strillone\strillone\obj\Debug\en\strillone.resources.dll
+C:\Users\francesca\documents\visual studio 2012\Projects\strillone\strillone\obj\Debug\fr\strillone.resources.dll
+C:\Users\francesca\Documents\Visual Studio 2012\Projects\strillone temp\strillone\Bin\Debug\strillone.dll
+C:\Users\francesca\Documents\Visual Studio 2012\Projects\strillone temp\strillone\Bin\Debug\strillone.pdb
+C:\Users\francesca\Documents\Visual Studio 2012\Projects\strillone temp\strillone\Bin\Debug\AppManifest.xaml
+C:\Users\francesca\Documents\Visual Studio 2012\Projects\strillone temp\strillone\Bin\Debug\Properties\WMAppManifest.xml
+C:\Users\francesca\Documents\Visual Studio 2012\Projects\strillone temp\strillone\Bin\Debug\strillone_Debug_AnyCPU.xap
+C:\Users\francesca\Documents\Visual Studio 2012\Projects\strillone temp\strillone\obj\Debug\App.g.cs
+C:\Users\francesca\Documents\Visual Studio 2012\Projects\strillone temp\strillone\obj\Debug\strillone.g.resources
+C:\Users\francesca\Documents\Visual Studio 2012\Projects\strillone temp\strillone\obj\Debug\strillone.Resources.AppResources.resources
+C:\Users\francesca\Documents\Visual Studio 2012\Projects\strillone temp\strillone\obj\Debug\strillone.csproj.GenerateResource.Cache
+C:\Users\francesca\Documents\Visual Studio 2012\Projects\strillone temp\strillone\obj\Debug\strillone.dll
+C:\Users\francesca\Documents\Visual Studio 2012\Projects\strillone temp\strillone\obj\Debug\strillone.pdb
+C:\Users\francesca\Documents\Visual Studio 2012\Projects\strillone temp\strillone\obj\Debug\XapCacheFile.xml
+C:\Users\francesca\Documents\Visual Studio 2012\Projects\strillone temp\strillone\Bin\Debug\en-US\strillone.resources.dll
+C:\Users\francesca\Documents\Visual Studio 2012\Projects\strillone temp\strillone\obj\Debug\strillone.Resources.AppResources.en-US.resources
+C:\Users\francesca\Documents\Visual Studio 2012\Projects\strillone temp\strillone\obj\Debug\en-US\strillone.resources.dll
+C:\Users\francesca\Documents\Visual Studio 2012\Projects\strillone temp\strillone\Bin\Debug\en\strillone.resources.dll
+C:\Users\francesca\Documents\Visual Studio 2012\Projects\strillone temp\strillone\Bin\Debug\fr\strillone.resources.dll
+C:\Users\francesca\Documents\Visual Studio 2012\Projects\strillone temp\strillone\obj\Debug\strillone.Resources.AppResources.en.resources
+C:\Users\francesca\Documents\Visual Studio 2012\Projects\strillone temp\strillone\obj\Debug\strillone.Resources.AppResources.fr.resources
+C:\Users\francesca\Documents\Visual Studio 2012\Projects\strillone temp\strillone\obj\Debug\en\strillone.resources.dll
+C:\Users\francesca\Documents\Visual Studio 2012\Projects\strillone temp\strillone\obj\Debug\fr\strillone.resources.dll
+C:\Users\francesca\Documents\Visual Studio 2012\Projects\strillone temp\strillone\Bin\Debug\pt\strillone.resources.dll
+C:\Users\francesca\Documents\Visual Studio 2012\Projects\strillone temp\strillone\obj\Debug\strillone.Resources.AppResources.pt.resources
+C:\Users\francesca\Documents\Visual Studio 2012\Projects\strillone temp\strillone\obj\Debug\pt\strillone.resources.dll
+C:\Users\francesca\Documents\Visual Studio 2012\Projects\strillone temp\strillone\obj\Debug\View\ExtendedSplashScreen.g.cs
+C:\Users\francesca\Documents\Visual Studio 2012\Projects\strillone temp\strillone\obj\Debug\View\MainPage.g.cs
+C:\Users\francesca\Documents\Visual Studio 2012\Projects\progetto strillone\strillone\Bin\Debug\strillone.dll
+C:\Users\francesca\Documents\Visual Studio 2012\Projects\progetto strillone\strillone\Bin\Debug\strillone.pdb
+C:\Users\francesca\Documents\Visual Studio 2012\Projects\progetto strillone\strillone\Bin\Debug\en-US\strillone.resources.dll
+C:\Users\francesca\Documents\Visual Studio 2012\Projects\progetto strillone\strillone\Bin\Debug\en\strillone.resources.dll
+C:\Users\francesca\Documents\Visual Studio 2012\Projects\progetto strillone\strillone\Bin\Debug\fr\strillone.resources.dll
+C:\Users\francesca\Documents\Visual Studio 2012\Projects\progetto strillone\strillone\Bin\Debug\pt\strillone.resources.dll
+C:\Users\francesca\Documents\Visual Studio 2012\Projects\progetto strillone\strillone\Bin\Debug\AppManifest.xaml
+C:\Users\francesca\Documents\Visual Studio 2012\Projects\progetto strillone\strillone\Bin\Debug\Properties\WMAppManifest.xml
+C:\Users\francesca\Documents\Visual Studio 2012\Projects\progetto strillone\strillone\Bin\Debug\strillone_Debug_AnyCPU.xap
+C:\Users\francesca\Documents\Visual Studio 2012\Projects\progetto strillone\strillone\obj\Debug\App.g.cs
+C:\Users\francesca\Documents\Visual Studio 2012\Projects\progetto strillone\strillone\obj\Debug\View\MainPage.g.cs
+C:\Users\francesca\Documents\Visual Studio 2012\Projects\progetto strillone\strillone\obj\Debug\View\ExtendedSplashScreen.g.cs
+C:\Users\francesca\Documents\Visual Studio 2012\Projects\progetto strillone\strillone\obj\Debug\strillone.g.resources
+C:\Users\francesca\Documents\Visual Studio 2012\Projects\progetto strillone\strillone\obj\Debug\strillone.Resources.AppResources.resources
+C:\Users\francesca\Documents\Visual Studio 2012\Projects\progetto strillone\strillone\obj\Debug\strillone.Resources.AppResources.en-US.resources
+C:\Users\francesca\Documents\Visual Studio 2012\Projects\progetto strillone\strillone\obj\Debug\strillone.Resources.AppResources.en.resources
+C:\Users\francesca\Documents\Visual Studio 2012\Projects\progetto strillone\strillone\obj\Debug\strillone.Resources.AppResources.fr.resources
+C:\Users\francesca\Documents\Visual Studio 2012\Projects\progetto strillone\strillone\obj\Debug\strillone.Resources.AppResources.pt.resources
+C:\Users\francesca\Documents\Visual Studio 2012\Projects\progetto strillone\strillone\obj\Debug\strillone.csproj.GenerateResource.Cache
+C:\Users\francesca\Documents\Visual Studio 2012\Projects\progetto strillone\strillone\obj\Debug\en-US\strillone.resources.dll
+C:\Users\francesca\Documents\Visual Studio 2012\Projects\progetto strillone\strillone\obj\Debug\en\strillone.resources.dll
+C:\Users\francesca\Documents\Visual Studio 2012\Projects\progetto strillone\strillone\obj\Debug\fr\strillone.resources.dll
+C:\Users\francesca\Documents\Visual Studio 2012\Projects\progetto strillone\strillone\obj\Debug\pt\strillone.resources.dll
+C:\Users\francesca\Documents\Visual Studio 2012\Projects\progetto strillone\strillone\obj\Debug\strillone.dll
+C:\Users\francesca\Documents\Visual Studio 2012\Projects\progetto strillone\strillone\obj\Debug\strillone.pdb
+C:\Users\francesca\Documents\Visual Studio 2012\Projects\progetto strillone\strillone\obj\Debug\XapCacheFile.xml

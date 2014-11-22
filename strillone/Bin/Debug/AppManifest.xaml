@@ -1,0 +1,9 @@
+﻿<Deployment xmlns="http://schemas.microsoft.com/client/2007/deployment" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" EntryPointAssembly="strillone" EntryPointType="strillone.App" RuntimeVersion="4.7.50308.0">
+  <Deployment.Parts>
+    <AssemblyPart x:Name="strillone" Source="strillone.dll" />
+    <AssemblyPart Source="en-US/strillone.resources.dll" />
+    <AssemblyPart Source="en/strillone.resources.dll" />
+    <AssemblyPart Source="fr/strillone.resources.dll" />
+    <AssemblyPart Source="pt/strillone.resources.dll" />
+  </Deployment.Parts>
+</Deployment>
