@@ -35,7 +35,8 @@ public class MainPresenter {
 	}
 	
 	public void downloadGiornale() {
-		String urlTestata = this.mainActivity.getURLTestata();
+		//String urlTestata = this.mainActivity.getURLTestata();
+		String urlTestata = this.mainActivity.getResourceTestata();//marta
 		
 		// Trova il nome del file.
 		Pattern pattern = Pattern.compile("([^\\/]+)$");

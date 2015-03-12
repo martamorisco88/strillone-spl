@@ -620,6 +620,13 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
 		return testata.getUrl();
 	}
 	
+	//marta
+	public String getResourceTestata() {
+			Testata testata = (Testata)this.testate.getTestate().get(iTestata);
+			return testata.getResource();
+			}
+			
+	
 	@Override
 	public void notifyGiornaleReceived(Giornale giornale) {
 		if (Configuration.DEBUGGABLE) Log.d(TAG, "notifyGiornaleReceived()");

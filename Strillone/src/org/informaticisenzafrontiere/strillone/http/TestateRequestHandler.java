@@ -29,7 +29,10 @@ public class TestateRequestHandler extends RequestHandler {
 
 	@Override
 	protected String getURL() {
-		return "http://www.walks.to/strillone/feeds/testate.php";
+		//return Configuration.URL +"/newspapers";
+		return "localhost/strillonews/testate.php";
+		//return "localhost/strillonews/newspapers";
+		//return "http://www.walks.to/strillone/feeds/testate.php";
 	}
 
 	@Override
@@ -51,10 +54,10 @@ public class TestateRequestHandler extends RequestHandler {
 				for (Testata testata : lTestate) {
 					if (lingua.equals(testata.getLingua())) {
 						if (Configuration.BETA) {
-							// Aggiungi incondizionatamente qualsiasi testata.
+							// Add unconditionally any newspapers.
 							lTestateNew.add(testata);
 						} else {
-							// Verifica che non sia una testata "beta".
+							// Check that it is not a newspaper "beta".
 							if (!testata.isBeta()) {
 								lTestateNew.add(testata);
 							}

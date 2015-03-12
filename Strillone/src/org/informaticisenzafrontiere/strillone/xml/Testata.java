@@ -18,8 +18,11 @@ public class Testata {
 	@Element(name="edizione")
 	private Date edizione;
 	
-	@Element(name="url")
+	@Element(name="url", required=false)
 	private String url;
+	
+	@Element(name="resource", required=false)
+	private String resource;
 	
 	@Element(name="beta", required=false)
 	private boolean beta; 
@@ -56,6 +59,14 @@ public class Testata {
 
 	public void setUrl(String url) {
 		this.url = url;
+	}
+	
+	public String getResource() {
+		return resource;
+	}
+
+	public void setResource(String resource) {
+		this.resource = resource;
 	}
 	
 	public boolean isBeta() {

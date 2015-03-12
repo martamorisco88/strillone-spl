@@ -6,6 +6,8 @@ public class Configuration {
 	
 	public static boolean BETA = false;
 	
-	public final static int SENTENCE_MAX_LENGTH = 3800; 
+	public final static int SENTENCE_MAX_LENGTH = 3800;
+	
+	public static String URL = "http://www.walks.to/strillonews";//marta
 
 }
