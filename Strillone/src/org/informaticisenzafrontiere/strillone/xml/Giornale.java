@@ -18,6 +18,9 @@ public class Giornale extends XMLMessage {
 	@Element(name="edizione")
 	private String edizione;
 	
+	@Element(name="idTestata", required=false)
+	private String idTestata;
+	
 	@ElementList(name="sezione", type=Sezione.class, inline=true)
 	private List<Sezione> sezioni;
 	
@@ -53,6 +56,14 @@ public class Giornale extends XMLMessage {
 
 	public void setSezioni(List<Sezione> sezioni) {
 		this.sezioni = sezioni;
+	}
+	
+	public String getId() {
+		return idTestata;
+	}
+
+	public void setId(String id) {
+		this.idTestata = id;
 	}
 
 }

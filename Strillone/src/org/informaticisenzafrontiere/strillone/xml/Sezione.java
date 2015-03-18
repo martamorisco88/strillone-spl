@@ -12,6 +12,9 @@ public class Sezione {
 	@Element(name="nome", required=false)
 	private String nome;
 	
+	@Element(name="idSezione", required=false)
+	private String idSezione;
+	
 	@ElementList(name="articolo", type=Articolo.class, inline=true, required=false)
 	private List<Articolo> articoli;
 	
@@ -24,6 +27,15 @@ public class Sezione {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
+	
+	
+	public String getId() {
+		return idSezione;
+	}
+
+	public void setId(String id) {
+		this.idSezione = id;
+	}
 
 	public List<Articolo> getArticoli() {
 		return articoli;
@@ -32,5 +44,6 @@ public class Sezione {
 	public void setArticoli(List<Articolo> articoli) {
 		this.articoli = articoli;
 	}
+	
 
 }

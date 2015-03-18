@@ -28,11 +28,11 @@ public class GiornaleRequestHandler extends RequestHandler {
 	public GiornaleRequestHandler(MainPresenter mainPresenter, String url, String filename) {
 		this.mainPresenter = mainPresenter;
 		//this.url = url;
+		//this.url = "http://www.walks.to/strillonews/newspapers/"+url;
 		//this.url = Configuration.URL +  "/newspapers/"+url; //marta
+    
+		this.url ="http://192.168.1.13/strillonews/index.php/newspapers/"+url;
 		
-	   // this.url = "localhost/strillonews/newspapers/"+url;
-		this.url ="localhost/strillonews/testate.php";
-		Log.i(TAG,"indirizzo"+this.url);
 		this.filename = filename;
 	}
 	
@@ -52,9 +52,10 @@ public class GiornaleRequestHandler extends RequestHandler {
 			this.mainPresenter.notifyCommunicationError(App.getInstance().getString(R.string.connecting_error));
 		} else {
 			try {
+				Log.i(TAG,"sono quiii ");
 				XMLHandler xmlHandler = new GiornaleXMLHandler();
 				Giornale giornale = (Giornale)xmlHandler.deserialize(response, true);
-				
+				Log.i(TAG,"funziono ");
 				List<Sezione> sezioni = giornale.getSezioni();
 				List<Sezione> newSezioni = new ArrayList<Sezione>();
 				
@@ -77,7 +78,10 @@ public class GiornaleRequestHandler extends RequestHandler {
 				this.mainPresenter.notifyGiornaleReceived(this.filename, giornale);
 			} catch (Exception e) {
 				if (Configuration.DEBUGGABLE) Log.d(TAG, "Eccezione.", e);
+				{Log.i(TAG,"ERRRORE 4");
+				
 				this.mainPresenter.notifyCommunicationError(App.getInstance().getString(R.string.connecting_error));
+				}
 			}
 		}
 	}

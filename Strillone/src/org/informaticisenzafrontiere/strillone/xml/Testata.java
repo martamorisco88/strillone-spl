@@ -24,6 +24,9 @@ public class Testata {
 	@Element(name="resource", required=false)
 	private String resource;
 	
+	@Element(name="idTestata", required=false)
+	private String idTestata;
+	
 	@Element(name="beta", required=false)
 	private boolean beta; 
 	
@@ -67,6 +70,14 @@ public class Testata {
 
 	public void setResource(String resource) {
 		this.resource = resource;
+	}
+	
+	public String getId() {
+		return idTestata;
+	}
+
+	public void setId(String id) {
+		this.idTestata = id;
 	}
 	
 	public boolean isBeta() {
