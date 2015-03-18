@@ -50,9 +50,44 @@ function get_newspapers() {
     echo $doc->saveXML();
 }
 
+function set_id($testata) {
+	$doc = new DOMDocument;
+	$doc->load('feeds/' . $testata . '.xml');
+	//Ottengo il numero delle sezioni contenute nel file
+	$n=0;
+	$sezioni = $doc->getElementsByTagName('sezione');
+	foreach ($sezioni as $sezione) {
+
+		$n++;
+	}
+	//Riempio un array di contentente i nomi delle sezioni
+	$k=0;
+	$nomi = $doc->getElementsByTagName('nome');
+	foreach ($nomi as $nome) {
+
+		$nomi_sezioni[]=$nome->nodeValue;
+		$k++;
+	}
+
+	//Inserisco il tag id
+
+	for ($i = 0; $i <= $n-1; $i++) {
+
+		$sezioni = $doc->getElementsByTagName('sezione')->item($i);
+                $stringa_id=$testata;
+	        $stringa_id .=$nomi_sezioni[$i];
+                $hash_id=hash('SHA256', $stringa_id);
+                $sezioni->appendChild($doc->createElement('id',$hash_id));
+	}
+
+	echo $doc->saveXML();
+	$doc->save('feeds/' . $testata . '.xml');
+}
+
 function get_newspaper($newspaper) {
+    set_id($newspaper);
     $file = 'feeds/' . $newspaper . '.xml';
-    $fp =fopen($file, 'r');
+    $fp = fopen($file, 'r');
     $n = fread($fp, filesize($file));
     fclose($fp);
 
