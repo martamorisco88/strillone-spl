@@ -25,7 +25,7 @@ function create_newspaper($doc, $lingua, $nome, $edizione, $resource,$id, $beta 
     $newspaper->appendChild($doc->createElement('nome', $nome));
     $newspaper->appendChild($doc->createElement('edizione', $edizione));
     $newspaper->appendChild($doc->createElement('resource', $resource));
-    $newspaper->appendChild($doc->createElement('id', $id));
+    $newspaper->appendChild($doc->createElement('idTestata', $id));
     if ($beta)
         $newspaper->appendChild($doc->createElement('beta', 'true'));
 
@@ -54,9 +54,9 @@ function set_id($newspaper) {
 	$doc = new DOMDocument;
 	$doc->load('feeds/' . $newspaper . '.xml');
 
-	//verify if there are node "id"
+	//verify if there are node "idSezione"
 	$n_id=0;
-	$ids = $doc->getElementsByTagName('id');
+	$ids = $doc->getElementsByTagName('idSezione');
 	foreach ($ids as $id) {
 		$n_id++;
 	}
@@ -81,7 +81,7 @@ function set_id($newspaper) {
 			$k++;
 		}
 
-		//insert node "id"
+		//insert node "idSezione"
 
 		for ($i = 0; $i <= $n-1; $i++) {
 
@@ -89,7 +89,7 @@ function set_id($newspaper) {
 			$string_id=$newspaper;
 			$string_id .=$sections_name[$i];
 			$hash_id=hash('SHA256', $string_id);
-			$sections->appendChild($doc->createElement('id',$hash_id));
+			$sections->appendChild($doc->createElement('idSezione',$hash_id));
 		}
 
 		echo $doc->saveXML();
