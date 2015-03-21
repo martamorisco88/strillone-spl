@@ -12,8 +12,8 @@ public class Sezione {
 	@Element(name="nome", required=false)
 	private String nome;
 	
-	@Element(name="idSezione", required=false)
-	private String idSezione;
+	@Element(name="id", required=false)
+	private String id;
 	
 	@ElementList(name="articolo", type=Articolo.class, inline=true, required=false)
 	private List<Articolo> articoli;
@@ -30,11 +30,11 @@ public class Sezione {
 	
 	
 	public String getId() {
-		return idSezione;
+		return id;
 	}
 
 	public void setId(String id) {
-		this.idSezione = id;
+		this.id = id;
 	}
 
 	public List<Articolo> getArticoli() {

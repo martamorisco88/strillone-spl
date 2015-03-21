@@ -9,22 +9,37 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
+import android.util.Log;
+import android.widget.Toast;
 
+import org.informaticisenzafrontiere.strillone.MainActivity;
+import org.informaticisenzafrontiere.strillone.R;
+
+@Root(name="bookmark")
 public class Bookmark {
 	
-	@Root(name="bookmarks")
+	private final static String TAG = Bookmark.class.getSimpleName();
+	
 
-		
-	    @ElementList(name="testata")
-	    private List<Testata> testate;
+	public Bookmark( )
+	{ 
+	
+	}
+	
+	 @ElementList(name="testata")
+     private List<Testata> testate;
+	    
+	
 
 
-		public Bookmark() { }
-
-		public List<Testata> getTestate() {
+     public List<Testata> getTestate() {
 			return testate;
 		}
 
+		
+	public void setTestate(List<Testata> testate) {
+			this.testate=testate;
+		}
 		
 	
 		public boolean verifyTestata(Bookmark bookmark,Testata testata) 
@@ -74,10 +89,12 @@ public class Bookmark {
        public Bookmark addTestata(Bookmark bookmark,Testata testata) 
 		
 		{
-			boolean exist=bookmark.verifyTestata(bookmark, testata);
-			
+			//boolean exist=bookmark.verifyTestata(bookmark, testata);
+			boolean exist=false;
+			List<Testata> testate=null;
 			if (exist==false) 	{
-				List<Testata> testate=bookmark.getTestate();
+				testate=bookmark.getTestate();
+				
 				              testate.add(testata);
 			                    }
 			return bookmark;
@@ -152,25 +169,27 @@ public class Bookmark {
        
        public Bookmark deleteOldArticoli(Bookmark bookmark,Giornale giornale,Sezione sezione) 
 		
-		{
+		{   Calendar calendar = new GregorianCalendar();
+		    Calendar today = calendar.getInstance();
+	        long millisecondsToday = today.getTimeInMillis();
+	        long millisecondsData;
+	        long diffDays;
+	        long diff;
 			boolean exist=bookmark.verifySezione(giornale,sezione);
 			
 			if (exist==true) 	{
 				List<Articolo> articoli=sezione.getArticoli();
-				Calendar calendar = new GregorianCalendar();
-				Date today = calendar.getTime();  
-				   for (int k=0; k<articoli.size()-1;k++ )
+			    for (int k=0; k<articoli.size()-1;k++ )
 				   {
 					   ArticoloBookmark articolo = (ArticoloBookmark) articoli.get(k);
-					   Date data=articolo.getData();
-					  
-
-			
-					   
+					   Calendar data=articolo.getData();
+					   millisecondsData =data.getTimeInMillis();
+					   diff=millisecondsToday-millisecondsData;
+					   diffDays = diff / (24 * 60 * 60 * 1000);	//differenza in giorni
+					   if (diffDays>=15)   articoli.remove(articolo);
 				   }
 				
-				
-			                    }
+	 		                    }
 			return bookmark;
 	    }
        

@@ -24,8 +24,8 @@ public class Testata {
 	@Element(name="resource", required=false)
 	private String resource;
 	
-	@Element(name="idTestata", required=false)
-	private String idTestata;
+	@Element(name="id", required=false)
+	private String id;
 	
 	@Element(name="beta", required=false)
 	private boolean beta; 
@@ -73,11 +73,11 @@ public class Testata {
 	}
 	
 	public String getId() {
-		return idTestata;
+		return id;
 	}
 
 	public void setId(String id) {
-		this.idTestata = id;
+		this.id = id;
 	}
 	
 	public boolean isBeta() {

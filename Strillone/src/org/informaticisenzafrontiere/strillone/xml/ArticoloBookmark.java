@@ -1,5 +1,6 @@
 package org.informaticisenzafrontiere.strillone.xml;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import org.simpleframework.xml.Element;
@@ -8,16 +9,16 @@ public class ArticoloBookmark extends Articolo{
 	
 	
 	@Element(name="data", data=true)
-	private Date data;
+	private Calendar data;
 
 	public ArticoloBookmark() { }
 	
 	
-	public Date getData() {
+	public Calendar getData() {
 		return data;
 	}
 
-	public void setData(Date data) {
+	public void setData(Calendar data) {
 		this.data=data;
 	}
 

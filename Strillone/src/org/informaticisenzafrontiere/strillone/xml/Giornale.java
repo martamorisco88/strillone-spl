@@ -18,8 +18,8 @@ public class Giornale extends XMLMessage {
 	@Element(name="edizione")
 	private String edizione;
 	
-	@Element(name="idTestata", required=false)
-	private String idTestata;
+	@Element(name="id", required=false)
+	private String id;
 	
 	@ElementList(name="sezione", type=Sezione.class, inline=true)
 	private List<Sezione> sezioni;
@@ -59,11 +59,11 @@ public class Giornale extends XMLMessage {
 	}
 	
 	public String getId() {
-		return idTestata;
+		return id;
 	}
 
 	public void setId(String id) {
-		this.idTestata = id;
+		this.id = id;
 	}
 
 }
