@@ -186,57 +186,7 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
 			}
 		});
         
-        
-       /* this.lowerRightButton.setOnLongClickListener(new View.OnLongClickListener() {
-		
-		public boolean onLongClick(View v) {
-			
-			// Create a Person object
-	        Person person1 = new Person();
-	        person1.SetFirstname("John");
-	        person1.SetLastname("Johnson");
-	        // Create a file to save to and make sure to use the path provided from
-	        // getFilesDir().getPath().
-	        File xmlFile = new File(getFilesDir().getPath() + "/Person.xml");
-	 
-	        // Serialize the Person
-	 
-	        try
-	        {
-	            Serializer serializer = new Persister();
-	            serializer.write(person1, xmlFile);
-	        }
-	        catch (Exception e)
-	        {
-	            e.printStackTrace();
-	        }
-	 
-	        // Create a second person object
-	        Person person2 = null;
-	 
-	        // Deserialize the Person
-	        if (xmlFile.exists())
-	        {
-	            try
-	            {
-	                Serializer serializer = new Persister();
-	                person2 = serializer.read(Person.class, xmlFile);
-	                Log.i("TAG",person2.GetFirstName());
-	            }
-	            catch (Exception e)
-	            {
-	                e.printStackTrace();
-	            }
-	        }
-			
-			
-			
-			
-			
-			return true;
-		}
-	});
-   */
+       
     
  
         this.upperLeftButton.setOnLongClickListener(new View.OnLongClickListener() {
