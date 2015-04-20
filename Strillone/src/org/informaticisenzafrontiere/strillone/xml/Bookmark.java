@@ -1,4 +1,6 @@
 package org.informaticisenzafrontiere.strillone.xml;
+
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -20,154 +22,186 @@ public class Bookmark {
 	
 	private final static String TAG = Bookmark.class.getSimpleName();
 	
-
-	public Bookmark( )
+	public Bookmark()
 	{ 
-	
 	}
 	
-	 @ElementList(name="testata")
-     private List<Testata> testate;
+	@ElementList(name="giornale")
+    private ArrayList<GiornaleBase> giornali=new ArrayList<GiornaleBase>();
 	    
-	
-
-
-     public List<Testata> getTestate() {
-			return testate;
+    public List<GiornaleBase> getGiornali() {
+			return giornali;
 		}
-
-		
-	public void setTestate(List<Testata> testate) {
-			this.testate=testate;
-		}
-		
 	
-		public boolean verifyTestata(Bookmark bookmark,Testata testata) 
-		
-		{
-			List<Testata> testate=bookmark.getTestate();
-			boolean exist=false;
-			int k=0;
-			 while ((k<testate.size()-1) && (exist==false))
-				{
-				  if (testate.get(k).getId()==testata.getId())
-					  exist=true;
-				}
-		     return exist;
-	     }
+	public void setGiornali(ArrayList<GiornaleBase>  giornali) {
+			this.giornali=giornali;
+		}
+	     
+	public boolean existsGiornaleBookmark(GiornaleBase giornale) 
 
-        public boolean verifySezione(Giornale giornale, Sezione sezione) 
-		
-		{
+	{
+		boolean exists=false;
+		int k=0;
+		 while ((k<giornali.size()-1) && !(exists))
+			{
+			  if (giornali.get(k).getId()==(giornale.getId()))
+				  exists=true;
+			k++;
+			}
+	     return exists;
+	 }
+
+	public int existsSezioneBookmark(GiornaleBase giornale,Sezione sezione) 
+    
+	{   boolean exists=false;
+	    int result = -1;
+		if (!this.existsGiornaleBookmark(giornale))
+				result=1;
+			
+		else {   //se il giornale esiste
 			List<Sezione> sezioni=giornale.getSezioni();
-			boolean exist=false;
 			int k=0;
-			 while ((k<sezioni.size()-1) && (exist==false))
-				{
-				  if (sezioni.get(k).getId()==sezione.getId())
-					  exist=true;
-				}
-		     return exist;
-	     }
-		
-        
-        public boolean verifyArticolo(Sezione sezione, Articolo articolo) 
-		
-		{
-			List<Articolo> articoli=sezione.getArticoli();
-			boolean exist=false;
-			int k=0;
-			 while ((k<articoli.size()-1) && (exist==false))
-				{
-				  if (articoli.get(k).getTitolo()==articolo.getTitolo())
-					  exist=true;
-				}
-		     return exist;
-	     }
-		
-        
-       public Bookmark addTestata(Bookmark bookmark,Testata testata) 
-		
-		{
-			//boolean exist=bookmark.verifyTestata(bookmark, testata);
-			boolean exist=false;
-			List<Testata> testate=null;
-			if (exist==false) 	{
-				testate=bookmark.getTestate();
-				
-				              testate.add(testata);
-			                    }
-			return bookmark;
-			
-	
+			while ((k<sezioni.size()-1) && (!exists))
+			 {
+			 if (sezioni.get(k).getId()==sezione.getId())
+			       {
+				    result=0;
+			        exists=true;
+		           }
+			 k++;
+		    }
+			if (!exists) result=2;
 			
 		}
-       
-       
-       public Bookmark addSezione(Bookmark bookmark,Giornale giornale,Sezione sezione) 
-		
+	     return result; //0 esistono il giornale e la sezione
+	                   // 1 manca il giornale (e la sezione)
+	                   // 2 manca solo la sezione
+	 }
+
+	public int existsArticoloBookmark(GiornaleBase giornale,Sezione sezione,Articolo articolo) 
+
+	{   boolean exists=false;
+	    int result = -1;
+	
+		if ((this.existsSezioneBookmark(giornale, sezione)==0)) //controlla solo articolo
 		{
-			boolean exist=bookmark.verifySezione(giornale, sezione);
+	    List<Articolo> articoli=null;
+	    articoli=sezione.getArticoli();
+	    int k=0;
+	    while ((k<articoli.size()-1) && (!exists))
+			    	{
+			    		if (articoli.get(k).getTitolo()==articolo.getTitolo())
+					       exists=true;
+			    		   result=0; //0 esistono il giornale, la sezione e l'articolo
+			    		   k++;
+			    		  
+			    		    
+			    	}	 
+	    if (!exists) result=3; // manca solo l'articolo 
+	    }
+		
+		else if ((this.existsSezioneBookmark(giornale, sezione)==1) || (this.existsSezioneBookmark(giornale, sezione)==2))//
+				result=this.existsSezioneBookmark(giornale, sezione);     // 1 manca il giornale,la sezione e articolo
+																		  // 2 manca la sezione e l'articolo
 			
-			if (exist==false) 	{
-				List<Sezione> sezioni=giornale.getSezioni();
-				              sezioni.add(sezione);
-			                    }
-			return bookmark;
+		return result;  //0 esistono il giornale e la sezione
+        			   // 1 manca il giornale (e la sezione)
+                       // 2 manca la sezione, l'articolo
+		               // 3 manca solo l'articolo
+		}
+
+	public void addGiornale(GiornaleBase giornale) 
+		{
+		if (!this.existsGiornaleBookmark(giornale)) giornali.add(giornale);
+	     }
+	
+	public void addSezione(Giornale giornale,Sezione sezione) 
+		
+		{   
+		 if((this.existsSezioneBookmark(giornale,sezione))== 1)//manca il giornale e la sezione 
+				{
+			     addGiornale(giornale);
+			     List<Sezione> sezioni=new ArrayList<Sezione>();
+			     sezioni=giornale.getSezioni();
+	             sezioni.add(sezione);
+
+			     
+				}
+		 else  if((this.existsSezioneBookmark(giornale,sezione))== 2)//manca la sezione
+		        {
+			    List<Sezione> sezioni=new ArrayList<Sezione>();
+				sezioni=giornale.getSezioni();
+			    sezioni.add(sezione);
+			    }
 	    }
 	
-       public Bookmark addArticolo(Bookmark bookmark,Giornale giornale,Sezione sezione,Articolo articolo) 
+    public void addArticolo(GiornaleBase giornale,Sezione sezione,Articolo articolo) 
 		
-		{
-			boolean exist=bookmark.verifyArticolo(sezione, articolo);
+		{   addGiornale(giornale);
+		    //addSezione(sezione);
+			int result=this.existsArticoloBookmark(giornale, sezione, articolo);
 			
-			if (exist==false) 	{
-				List<Articolo> articoli=sezione.getArticoli();
-				               articoli.add(articolo);
-			                    }
-			return bookmark;
+			 if((this.existsArticoloBookmark(giornale,sezione, articolo))== 1)//manca il giornale, la sezione e l'articolo
+				{
+			     addGiornale(giornale);
+			     List<Sezione> sezioni=new ArrayList<Sezione>();
+			     sezioni=giornale.getSezioni();
+	             sezioni.add(sezione);
+	             List<Articolo> articoli=new ArrayList<Articolo>();
+	             articoli.add(articolo);
+			     
+				}
+		 else  if((this.existsArticoloBookmark(giornale,sezione, articolo))== 2)//manca la sezione e l'articolo
+		        {
+			    List<Sezione> sezioni=new ArrayList<Sezione>();
+				sezioni=giornale.getSezioni();
+			    sezioni.add(sezione);
+			    List<Articolo> articoli=new ArrayList<Articolo>();
+	             articoli.add(articolo);
+			    }
+		 else  if((this.existsArticoloBookmark(giornale,sezione, articolo))== 3)//manca l'articolo
+	        {
+		    List<Articolo> articoli=new ArrayList<Articolo>();
+            articoli.add(articolo);
+		    }
 	    }
-       
-       
-       public Bookmark deleteTestata(Bookmark bookmark,Testata testata) 
+		 
+    public void deleteGiornale(GiornaleBase giornale) 
+	
+	{
+		boolean exist=existsGiornaleBookmark(giornale);
+		
+		if (exist==true) 	{
+			List<GiornaleBase> giornali=this.getGiornali();
+			               giornali.remove(giornali);
+		                    }
+
+    }
+	
+    public void deleteSezione(GiornaleBase giornale,Sezione sezione) 
 		
 		{
-			boolean exist=bookmark.verifyTestata(bookmark, testata);
-			
-			if (exist==true) 	{
-				List<Testata> testate=bookmark.getTestate();
-				              testate.remove(testata);
-			                    }
-			return bookmark;
-			
-         }
-       
-       
-       public Bookmark deleteSezione(Bookmark bookmark,Giornale giornale,Sezione sezione) 
-		
-		{
-			boolean exist=bookmark.verifySezione(giornale, sezione);
-			
-			if (exist==true) 	{
+
+			if (existsSezioneBookmark(giornale, sezione)==0)	{
 				List<Sezione> sezioni=giornale.getSezioni();
 				              sezioni.remove(sezione);
 			                    }
-			return bookmark;
+
 	    }
 		
-       public Bookmark deleteArticolo(Bookmark bookmark,Giornale giornale,Sezione sezione,Articolo articolo) 
+    public void deleteArticolo(GiornaleBase giornale,Sezione sezione,Articolo articolo) 
 		
 		{
-			boolean exist=bookmark.verifyArticolo(sezione, articolo);
+			if (this.existsArticoloBookmark(giornale, sezione, articolo)==0)
 			
-			if (exist==true) 	{
+				{
 				List<Articolo> articoli=sezione.getArticoli();
 				               articoli.remove(articolo);
 			                    }
-			return bookmark;
+
 	    }
        
-       public Bookmark deleteOldArticoli(Bookmark bookmark,Giornale giornale,Sezione sezione) 
+    /*public void  deleteOldArticoli(GiornaleBase giornale,Sezione sezione) 
 		
 		{   Calendar calendar = new GregorianCalendar();
 		    Calendar today = calendar.getInstance();
@@ -175,7 +209,7 @@ public class Bookmark {
 	        long millisecondsData;
 	        long diffDays;
 	        long diff;
-			boolean exist=bookmark.verifySezione(giornale,sezione);
+			boolean exist=this.existsSezioneBookmark(sezione);
 			
 			if (exist==true) 	{
 				List<Articolo> articoli=sezione.getArticoli();
@@ -190,8 +224,8 @@ public class Bookmark {
 				   }
 				
 	 		                    }
-			return bookmark;
 	    }
-       
+       */
 	
 }
+

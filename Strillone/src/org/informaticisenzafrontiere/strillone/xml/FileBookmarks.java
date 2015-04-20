@@ -3,40 +3,101 @@ package org.informaticisenzafrontiere.strillone.xml;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.List;
 
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 
 
 
+
+
+
+
+import org.informaticisenzafrontiere.strillone.MainActivity;
+
+import android.util.Log;
+
+
+
 public class FileBookmarks {
 
+private final static String TAG = FileBookmarks.class.getSimpleName();
+
 	
-public void createFileBookmarks() throws Exception{
+public void createFileBookmarks(String path) throws Exception{
+
+	
+	File BookmarksXml = new File(path);
+	
+    
+	if (!(BookmarksXml.exists())) 
+	        {
+
+    	Bookmark bookmark =new Bookmark();
+        try {   	
+        	    Serializer serializer = new Persister();
+				serializer.write(bookmark,BookmarksXml);
+				
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+           }
+}
+
+public void deleteFileBookmarks(String path){
 	
 
-	Serializer serializer = new Persister();
-	File source = new File("Bookmaks.xml");
-	Bookmark bookmark = serializer.read(Bookmark.class, source);
+	File BookmarksXml = new File(path);
+	if (BookmarksXml.exists())
+    {
+       BookmarksXml.delete();
+	}
+}
+
+public Bookmark readBookmark(String path){
+	
+	File BookmarksXml = new File(path);
+	Bookmark bookmark = null;
+	
+	if ( BookmarksXml.exists())
+    {
+        try
+        {
+            Serializer serializer = new Persister();
+            bookmark = serializer.read(Bookmark.class, BookmarksXml);
+            
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+	return bookmark;
 	
 }
 
-public void deleteFileBookmarks(){
+public void writeBookmark(String path,Bookmark bookmark){
+	
+	File BookmarksXml = new File(path);
+
+	if ( BookmarksXml.exists())
+    {
+        try
+        {
+            Serializer serializer = new Persister();
+            serializer.write(bookmark, BookmarksXml);
+            
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+	
+
 	
 }
-
-public void insertBookmark(){
-	
-}
-
-public void deleteBookmark(){
-	
-}
-
-
-
-
-
-	
 	
 }

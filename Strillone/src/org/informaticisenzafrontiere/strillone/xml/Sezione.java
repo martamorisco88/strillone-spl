@@ -1,5 +1,6 @@
 package org.informaticisenzafrontiere.strillone.xml;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.simpleframework.xml.Element;
@@ -16,7 +17,7 @@ public class Sezione {
 	private String id;
 	
 	@ElementList(name="articolo", type=Articolo.class, inline=true, required=false)
-	private List<Articolo> articoli;
+	private List<Articolo> articoli=new ArrayList<Articolo>();
 	
 	public Sezione() { }
 

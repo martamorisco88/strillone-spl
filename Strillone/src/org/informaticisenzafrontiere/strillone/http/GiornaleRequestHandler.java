@@ -52,10 +52,9 @@ public class GiornaleRequestHandler extends RequestHandler {
 			this.mainPresenter.notifyCommunicationError(App.getInstance().getString(R.string.connecting_error));
 		} else {
 			try {
-				Log.i(TAG,"sono quiii ");
 				XMLHandler xmlHandler = new GiornaleXMLHandler();
 				Giornale giornale = (Giornale)xmlHandler.deserialize(response, true);
-				Log.i(TAG,"funziono ");
+
 				List<Sezione> sezioni = giornale.getSezioni();
 				List<Sezione> newSezioni = new ArrayList<Sezione>();
 				
@@ -78,7 +77,7 @@ public class GiornaleRequestHandler extends RequestHandler {
 				this.mainPresenter.notifyGiornaleReceived(this.filename, giornale);
 			} catch (Exception e) {
 				if (Configuration.DEBUGGABLE) Log.d(TAG, "Eccezione.", e);
-				{Log.i(TAG,"ERRRORE 4");
+				{
 				
 				this.mainPresenter.notifyCommunicationError(App.getInstance().getString(R.string.connecting_error));
 				}

@@ -1,19 +1,32 @@
 package org.informaticisenzafrontiere.strillone;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
+
+import org.simpleframework.xml.Serializer;
+import org.simpleframework.xml.core.Persister;
 
 import org.informaticisenzafrontiere.strillone.ui.StrilloneButton;
 import org.informaticisenzafrontiere.strillone.ui.StrilloneProgressDialog;
 import org.informaticisenzafrontiere.strillone.util.Configuration;
 import org.informaticisenzafrontiere.strillone.xml.Articolo;
+import org.informaticisenzafrontiere.strillone.xml.Bookmark;
+import org.informaticisenzafrontiere.strillone.xml.FileBookmarks;
 import org.informaticisenzafrontiere.strillone.xml.Giornale;
+import org.informaticisenzafrontiere.strillone.xml.GiornaleBase;
 import org.informaticisenzafrontiere.strillone.xml.Sezione;
 import org.informaticisenzafrontiere.strillone.xml.Testata;
 import org.informaticisenzafrontiere.strillone.xml.Testate;
+import org.informaticisenzafrontiere.strillone.xml.TestateXMLHandler;
+import org.informaticisenzafrontiere.strillone.xml.XMLHandler;
 
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -22,6 +35,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.PowerManager;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -40,11 +54,12 @@ import android.widget.Toast;
 public class MainActivity extends Activity implements IMainActivity, OnInitListener, OnUtteranceCompletedListener, Handler.Callback {
 	
 	private final static String TAG = MainActivity.class.getSimpleName();
-	
+
 	enum NavigationLevel {
 		TESTATE, SEZIONI, ARTICOLI;
 	}
 	
+	private String bookmarksPath;
 	private MainPresenter mainPresenter;
 	
 	private TextToSpeech textToSpeech;
@@ -97,7 +112,133 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
         this.upperRightButton = getUpperRightButton();
         this.lowerLeftButton = getLowerLeftButton();
         this.lowerRightButton = getLowerRightButton();
+      
+       final FileBookmarks fileBookmarks = new FileBookmarks();
+        try {
+        	bookmarksPath=getFilesDir().getPath() + "/bookmark.xml";
+        	fileBookmarks.createFileBookmarks(bookmarksPath);
+        	//fileBookmarks.deleteFileBookmarks(bookmarksPath);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         
+        final List<String> stringhe = new ArrayList<String>();
+        stringhe.add("prova1");
+        
+        		
+        
+          this.lowerRightButton.setOnLongClickListener(new View.OnLongClickListener() {
+			public boolean onLongClick(View v) {
+				
+                final FileBookmarks fileBookmarks = new FileBookmarks();
+				Bookmark bookmark = new Bookmark();
+				bookmark=fileBookmarks.readBookmark(bookmarksPath);
+			
+				
+				switch (navigationLevel) {
+				
+				case TESTATE:
+					if (iTestata >= 0) {
+						
+						String nomeTestata=MainActivity.this.testate.getTestate().get(iTestata).getNome();
+						String idTestata=MainActivity.this.testate.getTestate().get(iTestata).getId();
+						
+						//Toast.makeText(MainActivity.this,"sei qui: "+ nomeTestata+""+idTestata,Toast.LENGTH_SHORT).show();
+						
+					    GiornaleBase newGiornaleBookmark= new GiornaleBase();
+					    newGiornaleBookmark.setTestata(nomeTestata);
+					    newGiornaleBookmark.setId(idTestata);
+					    Log.i(TAG,"TESTATA"+newGiornaleBookmark.getTestata());
+					    Log.i(TAG,"ID"+newGiornaleBookmark.getId());
+					    Toast.makeText(MainActivity.this,"sei qui: "+ nomeTestata+""+idTestata,Toast.LENGTH_SHORT).show();
+						bookmark.addGiornale(newGiornaleBookmark);
+						fileBookmarks.writeBookmark(bookmarksPath, bookmark);    			
+		    		}
+					break;
+					
+				case SEZIONI:
+					if (iSezione >= 0) {
+						
+						String nomeTestata=MainActivity.this.testate.getTestate().get(iTestata).getNome();
+						//Toast.makeText(MainActivity.this,"sei qui: "+ nomeTestata+" "+sezione,Toast.LENGTH_SHORT).show();
+						String nomeSezione=MainActivity.this.giornale.getSezioni().get(iSezione).getNome();
+						String idSezione=MainActivity.this.giornale.getSezioni().get(iSezione).getId();
+						Sezione newSezioneBookmark= new Sezione();
+						newSezioneBookmark.setNome(nomeSezione);
+						newSezioneBookmark.setId(idSezione);
+			    		bookmark.addSezione(giornale, newSezioneBookmark);    		
+			    		
+		    		}
+					break;
+				case ARTICOLI:
+					if (iArticolo >= 0) {
+			    		// Leggi l'articolo.
+			    		
+		    		}
+					break;
+				default:
+					break;
+			}
+	    	
+				
+				return true;
+			}
+		});
+        
+        
+       /* this.lowerRightButton.setOnLongClickListener(new View.OnLongClickListener() {
+		
+		public boolean onLongClick(View v) {
+			
+			// Create a Person object
+	        Person person1 = new Person();
+	        person1.SetFirstname("John");
+	        person1.SetLastname("Johnson");
+	        // Create a file to save to and make sure to use the path provided from
+	        // getFilesDir().getPath().
+	        File xmlFile = new File(getFilesDir().getPath() + "/Person.xml");
+	 
+	        // Serialize the Person
+	 
+	        try
+	        {
+	            Serializer serializer = new Persister();
+	            serializer.write(person1, xmlFile);
+	        }
+	        catch (Exception e)
+	        {
+	            e.printStackTrace();
+	        }
+	 
+	        // Create a second person object
+	        Person person2 = null;
+	 
+	        // Deserialize the Person
+	        if (xmlFile.exists())
+	        {
+	            try
+	            {
+	                Serializer serializer = new Persister();
+	                person2 = serializer.read(Person.class, xmlFile);
+	                Log.i("TAG",person2.GetFirstName());
+	            }
+	            catch (Exception e)
+	            {
+	                e.printStackTrace();
+	            }
+	        }
+			
+			
+			
+			
+			
+			return true;
+		}
+	});
+   */
+    
+ 
         this.upperLeftButton.setOnLongClickListener(new View.OnLongClickListener() {
 			
 			public boolean onLongClick(View v) {
@@ -702,6 +843,9 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
 	public boolean handleMessage(Message msg) {
 		return false;
 	}
+	
+	
+	
 	
 }
 
