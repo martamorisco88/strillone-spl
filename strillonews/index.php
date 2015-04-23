@@ -25,7 +25,7 @@ function create_newspaper($doc, $lingua, $nome, $edizione, $resource,$id, $beta 
     $newspaper->appendChild($doc->createElement('nome', $nome));
     $newspaper->appendChild($doc->createElement('edizione', $edizione));
     $newspaper->appendChild($doc->createElement('resource', $resource));
-    $newspaper->appendChild($doc->createElement('idTestata', $id));
+    $newspaper->appendChild($doc->createElement('id', $id));
     if ($beta)
         $newspaper->appendChild($doc->createElement('beta', 'true'));
 
@@ -50,13 +50,14 @@ function get_newspapers() {
     echo $doc->saveXML();
 }
 
-function set_id($newspaper) {
+function set_id($testata) {
 	$doc = new DOMDocument;
-	$doc->load('feeds/' . $newspaper . '.xml');
+	$doc->load('feeds/' . $testata . '.xml');
 
-	//verify if there are node "idSezione"
+
+        //verify if there are node "id"
 	$n_id=0;
-	$ids = $doc->getElementsByTagName('idSezione');
+	$ids = $doc->getElementsByTagName('id');
 	foreach ($ids as $id) {
 		$n_id++;
 	}
@@ -65,37 +66,46 @@ function set_id($newspaper) {
 
 	{
 
-		//number of newspaper's sections
-		$n=0;
-		$sections = $doc->getElementsByTagName('sezione');
-		foreach ($sections as $section) {
 
-			$n++;
-		}
-		//array of sections's names
-		$k=0;
-		$names = $doc->getElementsByTagName('nome');
-		foreach ($names as $name) {
+	//Ottengo il numero delle sezioni contenute nel file
+	$n=0;
+	$sezioni = $doc->getElementsByTagName('sezione');
+	foreach ($sezioni as $sezione) {
 
-			$sections_name[]=$name->nodeValue;
-			$k++;
-		}
-
-		//insert node "idSezione"
-
-		for ($i = 0; $i <= $n-1; $i++) {
-
-			$sections = $doc->getElementsByTagName('sezione')->item($i);
-			$string_id=$newspaper;
-			$string_id .=$sections_name[$i];
-			$hash_id=hash('SHA256', $string_id);
-			$sections->appendChild($doc->createElement('idSezione',$hash_id));
-		}
-
-		echo $doc->saveXML();
-		$doc->save('feeds/' . $newspaper . '.xml');
+		$n++;
 	}
+	//Riempio un array di contentente i nomi delle sezioni
+	$k=0;
+	$nomi = $doc->getElementsByTagName('nome');
+	foreach ($nomi as $nome) {
+
+		$nomi_sezioni[]=$nome->nodeValue;
+		$k++;
+	}
+
+	//Inserisco il tag id
+
+	for ($i = 0; $i <= $n-1; $i++) {
+
+		$sezioni = $doc->getElementsByTagName('sezione')->item($i);
+                $stringa_id=$testata;
+	        $stringa_id .=$nomi_sezioni[$i];
+                $hash_id=hash('SHA256', $stringa_id);
+                $sezioni->appendChild($doc->createElement('id',$hash_id));
+	}
+	
+	
+	$giornale=$doc->getElementsByTagName('giornale')->item(0);
+        $nodo_testata = $doc->getElementsByTagName('testata')->item(0);
+	$hash_id=hash('SHA256', $nodo_testata->nodeValue);
+	$giornale->appendChild($doc->createElement('id',$hash_id));
+
+	echo $doc->saveXML();
+	$doc->save('feeds/' . $testata . '.xml');
+  }
+
 }
+
 function get_newspaper($newspaper) {
     set_id($newspaper);
     $file = 'feeds/' . $newspaper . '.xml';
