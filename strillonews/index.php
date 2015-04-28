@@ -39,18 +39,20 @@ function get_newspapers() {
     $doc = new DOMDocument('1.0', 'UTF-8');
     $testate = $doc->createElement('testate');
 
-    $testate->appendChild(create_newspaper($doc, 'it', 'repubblica punto it', $today, $KEY_REPUBBLICA_IT,hash('SHA256', $KEY_REPUBBLICA_IT)));
+    $testate->appendChild(create_newspaper($doc, 'it', 'repubblica punto it', $today, $KEY_REPUBBLICA_IT ,hash('SHA256', $KEY_REPUBBLICA_IT)));
     $testate->appendChild(create_newspaper($doc, 'it', 'go bari', $today, $KEY_GO_BARI,hash('SHA256', $KEY_GO_BARI)));
     $testate->appendChild(create_newspaper($doc, 'it', 'go fasano', $today, $KEY_GO_FASANO,hash('SHA256', $KEY_GO_FASANO)));
     $testate->appendChild(create_newspaper($doc, 'it', 'favole e racconti', $today, $KEY_FAVOLE_E_RACCONTI,hash('SHA256', $KEY_FAVOLE_E_RACCONTI)));
-    $testate->appendChild(create_newspaper($doc, 'en', 'test inglese', $today, $KEY_TEST_INGLESE,hash('SHA256', $KEY_TEST_INGLESE)));
-    $testate->appendChild(create_newspaper($doc, 'pt', 'test portoghese', $today, $KEY_TEST_PORTOGHESE,hash('SHA256', $KEY_TEST_PORTOGHESE)));
+    $testate->appendChild(create_newspaper($doc, 'en', 'test inglese', $today, $KEY_TEST_INGLESE,hash('SHA256',$KEY_TEST_INGLESE)));
+    $testate->appendChild(create_newspaper($doc, 'pt', 'test portoghese', $today, $KEY_TEST_PORTOGHESE,hash('SHA256',$KEY_TEST_PORTOGHESE )));
 
     $doc->appendChild($testate);
     echo $doc->saveXML();
 }
 
 function set_id($testata) {
+	global $KEY_REPUBBLICA_IT, $KEY_GO_BARI, $KEY_GO_FASANO, $KEY_FAVOLE_E_RACCONTI, $KEY_TEST_INGLESE, $KEY_TEST_PORTOGHESE;
+	
 	$doc = new DOMDocument;
 	$doc->load('feeds/' . $testata . '.xml');
 
@@ -83,7 +85,7 @@ function set_id($testata) {
 		$k++;
 	}
 
-	//Inserisco il tag id
+	//Inserisco il tag id nelle sezioni
 
 	for ($i = 0; $i <= $n-1; $i++) {
 
@@ -94,11 +96,38 @@ function set_id($testata) {
                 $sezioni->appendChild($doc->createElement('id',$hash_id));
 	}
 	
-	
+
+	//Inserisco il tag id nei giornali
 	$giornale=$doc->getElementsByTagName('giornale')->item(0);
-        $nodo_testata = $doc->getElementsByTagName('testata')->item(0);
-	$hash_id=hash('SHA256', $nodo_testata->nodeValue);
-	$giornale->appendChild($doc->createElement('id',$hash_id));
+    $nodo_testata = $doc->getElementsByTagName('testata')->item(0);
+    switch ($nodo_testata->nodeValue) {
+    	case 'Repubblica punto it':
+    		$hash_id=hash('SHA256', $KEY_REPUBBLICA_IT);
+    		break;
+    	case 'Gobari':
+    		$hash_id=hash('SHA256', $KEY_GO_BARI) ;
+    		break;
+    	case 'Gofasano':
+    		$hash_id=hash('SHA256',$KEY_GO_FASANO);
+    		break;
+    	case 'Favole e Racconti':		
+    		$hash_id=hash('SHA256', $KEY_FAVOLE_E_RACCONTI);
+    		break;
+    	case 'Test News':
+    		{
+           switch ($doc->getElementsByTagName('lingua')->nodeValue) {
+    			case 'en':
+    				$hash_id=hash('SHA256',KEY_TEST_INGLESE);
+    				 break;
+    		    case 'pt':
+    				$hash_id=hash('SHA256',	$KEY_TEST_PORTOGHESE);
+    				break;
+    		}
+    		break;
+    		 }
+     }
+    
+    $giornale->appendChild($doc->createElement('id',$hash_id));
 
 	echo $doc->saveXML();
 	$doc->save('feeds/' . $testata . '.xml');
