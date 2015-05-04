@@ -6,6 +6,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -18,6 +20,7 @@ import org.informaticisenzafrontiere.strillone.ui.StrilloneButton;
 import org.informaticisenzafrontiere.strillone.ui.StrilloneProgressDialog;
 import org.informaticisenzafrontiere.strillone.util.Configuration;
 import org.informaticisenzafrontiere.strillone.xml.Articolo;
+import org.informaticisenzafrontiere.strillone.xml.ArticoloBookmark;
 import org.informaticisenzafrontiere.strillone.xml.Bookmark;
 import org.informaticisenzafrontiere.strillone.xml.FileBookmarks;
 import org.informaticisenzafrontiere.strillone.xml.Giornale;
@@ -117,16 +120,11 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
         try {
         	bookmarksPath=getFilesDir().getPath() + "/bookmark.xml";
         	fileBookmarks.createFileBookmarks(bookmarksPath);
-        	//fileBookmarks.deleteFileBookmarks(bookmarksPath);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
         
-        final List<String> stringhe = new ArrayList<String>();
-        stringhe.add("prova1");
-        
-        		
         
           this.lowerRightButton.setOnLongClickListener(new View.OnLongClickListener() {
 			public boolean onLongClick(View v) {
@@ -140,42 +138,37 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
 				
 				case TESTATE:
 					if (iTestata >= 0) {
-						
-						String nomeTestata=MainActivity.this.testate.getTestate().get(iTestata).getNome();
-						String idTestata=MainActivity.this.testate.getTestate().get(iTestata).getId();
-						
-						//Toast.makeText(MainActivity.this,"sei qui: "+ nomeTestata+""+idTestata,Toast.LENGTH_SHORT).show();
-						
+
 					    GiornaleBase newGiornaleBookmark= new GiornaleBase();
-					    newGiornaleBookmark.setTestata(nomeTestata);
-					    newGiornaleBookmark.setId(idTestata);
-					    Log.i(TAG,"TESTATA"+newGiornaleBookmark.getTestata());
-					    Log.i(TAG,"ID"+newGiornaleBookmark.getId());
-					    Toast.makeText(MainActivity.this,"sei qui: "+ nomeTestata+""+idTestata,Toast.LENGTH_SHORT).show();
-						bookmark.addGiornale(newGiornaleBookmark);
+					    newGiornaleBookmark.setId(MainActivity.this.testate.getTestate().get(iTestata).getId());
+					    newGiornaleBookmark.setTestata(MainActivity.this.testate.getTestate().get(iTestata).getNome());
+					    bookmark.addBookmarkGiornale(newGiornaleBookmark);
 						fileBookmarks.writeBookmark(bookmarksPath, bookmark);    			
 		    		}
 					break;
 					
 				case SEZIONI:
 					if (iSezione >= 0) {
-						
-						String nomeTestata=MainActivity.this.testate.getTestate().get(iTestata).getNome();
-						//Toast.makeText(MainActivity.this,"sei qui: "+ nomeTestata+" "+sezione,Toast.LENGTH_SHORT).show();
-						String nomeSezione=MainActivity.this.giornale.getSezioni().get(iSezione).getNome();
-						String idSezione=MainActivity.this.giornale.getSezioni().get(iSezione).getId();
+                 
 						Sezione newSezioneBookmark= new Sezione();
-						newSezioneBookmark.setNome(nomeSezione);
-						newSezioneBookmark.setId(idSezione);
-			    		bookmark.addSezione(giornale, newSezioneBookmark);    		
+						newSezioneBookmark.setNome(MainActivity.this.giornale.getSezioni().get(iSezione).getNome());
+						newSezioneBookmark.setId(MainActivity.this.giornale.getSezioni().get(iSezione).getId());
+				        bookmark.addBookmarkSezione((GiornaleBase) giornale, newSezioneBookmark);    		
+			    		fileBookmarks.writeBookmark(bookmarksPath, bookmark);    			
 			    		
 		    		}
 					break;
 				case ARTICOLI:
 					if (iArticolo >= 0) {
-			    		// Leggi l'articolo.
-			    		
-		    		}
+
+						Calendar data = new GregorianCalendar();
+					    ArticoloBookmark newArticolo=new ArticoloBookmark();
+					    newArticolo.setTesto(MainActivity.this.giornale.getSezioni().get(iSezione).getArticoli().get(iArticolo).getTesto());
+					    newArticolo.setTitolo(MainActivity.this.giornale.getSezioni().get(iSezione).getArticoli().get(iArticolo).getTitolo());
+					    newArticolo.setData(data.getInstance());
+					    bookmark.addBookmarkArticolo((GiornaleBase) giornale,MainActivity.this.giornale.getSezioni().get(iSezione),newArticolo) ;    		
+			    		fileBookmarks.writeBookmark(bookmarksPath, bookmark);    	
+						}
 					break;
 				default:
 					break;
@@ -186,13 +179,12 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
 			}
 		});
         
-       
     
  
         this.upperLeftButton.setOnLongClickListener(new View.OnLongClickListener() {
 			
 			public boolean onLongClick(View v) {
-				// Se Ã¨ un testo "splitted" perchÃ© troppo lungo, svuota
+				// Se è un testo "splitted" perché troppo lungo, svuota
 	    		// la code dei messaggi in modo che allo stop non venga
 	    		// riprodotto il messaggio successivo.
 	    		if (MainActivity.this.sentences != null)
@@ -213,7 +205,7 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
         this.lowerLeftButton.setOnLongClickListener(new View.OnLongClickListener() {
 			@Override
 			public boolean onLongClick(View v) {
-				// Se Ã¨ un testo "splitted" perchÃ© troppo lungo, svuota
+				// Se è un testo "splitted" perché troppo lungo, svuota
 	    		// la code dei messaggi in modo che allo stop non venga
 	    		// riprodotto il messaggio successivo.
 	    		if (MainActivity.this.sentences != null)
@@ -230,7 +222,7 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
 			
 			@Override
 			public boolean onLongClick(View v) {
-				// Se Ã¨ un testo "splitted" perchÃ© troppo lungo, svuota
+				// Se è un testo "splitted" perché troppo lungo, svuota
 	    		// la code dei messaggi in modo che allo stop non venga
 	    		// riprodotto il messaggio successivo.
 	    		if (MainActivity.this.sentences != null)
@@ -241,7 +233,7 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
 				// Calcola la posizione.
 				StringBuffer sbPosizione = new StringBuffer(getString(R.string.pos_current));
 				if (iTestata < 0) {
-					// Non Ã¨ stata selezionata alcuna testata.
+					// Non è stata selezionata alcuna testata.
 					sbPosizione.append(getString(R.string.pos_no_header_selected));
 				} else {
 					Testata testata = MainActivity.this.testate.getTestate().get(iTestata);
@@ -252,7 +244,7 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
 					sbPosizione.append(". ");
 					
 					if (iSezione < 0) {
-						// Non Ã¨ stata selezionata alcuna sezione.
+						// Non è stata selezionata alcuna sezione.
 						sbPosizione.append(getString(R.string.pos_no_section_selected));
 					} else {
 						Sezione sezione = MainActivity.this.giornale.getSezioni().get(iSezione);
@@ -355,7 +347,7 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
 
 	public void performUpperLeftAction(View v) {
     	if (this.textToSpeech.isSpeaking()) {
-    		// Se Ã¨ un testo "splitted" perchÃ© troppo lungo, svuota
+    		// Se è un testo "splitted" perché troppo lungo, svuota
     		// la code dei messaggi in modo che allo stop non venga
     		// riprodotto il messaggio successivo.
     		if (this.sentences != null)

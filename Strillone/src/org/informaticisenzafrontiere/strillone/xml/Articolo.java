@@ -1,5 +1,7 @@
 package org.informaticisenzafrontiere.strillone.xml;
 
+import java.util.Calendar;
+
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
@@ -31,3 +33,10 @@ public class Articolo {
 	}
 	
 }
+
+
+
+
+
+	
+

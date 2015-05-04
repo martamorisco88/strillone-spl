@@ -9,15 +9,15 @@ import org.simpleframework.xml.Root;
 
 @Root(name="giornale")
 public class GiornaleBase extends XMLMessage {
-
-	@Element(name="testata")
-	private String testata;
-	
 	
 	@Element(name="id")
 	private String id;
+	
+	@Element(name="testata",required=false)
+	private String testata;
 
-	@ElementList(name="sezione",required=false,type=Sezione.class, inline=true)
+
+	@ElementList(name="sezione",required=false, inline=true)
 	private List<Sezione> sezioni= new ArrayList<Sezione>();
 	
 	

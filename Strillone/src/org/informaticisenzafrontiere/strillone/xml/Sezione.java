@@ -16,7 +16,7 @@ public class Sezione {
 	@Element(name="id", required=false)
 	private String id;
 	
-	@ElementList(name="articolo", type=Articolo.class, inline=true, required=false)
+	@ElementList(name="articolo",inline=true, required=false)
 	private List<Articolo> articoli=new ArrayList<Articolo>();
 	
 	public Sezione() { }
