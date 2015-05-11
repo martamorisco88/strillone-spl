@@ -57,7 +57,12 @@
 		    
 		</LinearLayout>
 	</LinearLayout>
-	
+	<View
+        android:id="@+id/view1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true" />
     
 	<ImageView android:id="@+id/navigationArrowsImageView" android:layout_width="200dip" android:layout_height="200dip" android:src="@drawable/marchi" android:layout_centerInParent="true" />
 	

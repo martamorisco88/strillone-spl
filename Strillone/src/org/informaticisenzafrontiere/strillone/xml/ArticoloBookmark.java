@@ -9,16 +9,21 @@ public class ArticoloBookmark extends Articolo{
 	
 	
 	@Element(name="data", data=true)
-	private Calendar data;
+	private Date data;
 
 	public ArticoloBookmark() { }
 	
+	public ArticoloBookmark(String titolo, String testo, Date data) {
 	
-	public Calendar getData() {
+	 super(titolo,testo);
+	 setData(data);
+	}
+
+	public Date getData() {
 		return data;
 	}
 
-	public void setData(Calendar data) {
+	public void setData(Date data) {
 		this.data=data;
 	}
 

@@ -15,6 +15,13 @@ public class Articolo {
 	private String testo;
 
 	public Articolo() { }
+	
+	public Articolo(String titolo, String testo ) {
+		
+		setTitolo(titolo);
+		setTesto(testo);
+		
+	} // marta
 
 	public String getTitolo() {
 		return titolo;

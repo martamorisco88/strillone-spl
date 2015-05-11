@@ -1,5 +1,6 @@
 package org.informaticisenzafrontiere.strillone.xml;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.simpleframework.xml.ElementList;
@@ -9,7 +10,7 @@ import org.simpleframework.xml.Root;
 public class Testate extends XMLMessage {
 
 	@ElementList(name="testata", type=Testata.class, inline=true)
-	private List<Testata> testate;
+	private List<Testata> testate=new ArrayList<Testata>();
 	
 	public Testate() { }
 

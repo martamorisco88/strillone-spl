@@ -2,6 +2,8 @@ package org.informaticisenzafrontiere.strillone.http;
 
 import java.util.Map;
 
+import org.informaticisenzafrontiere.strillone.xml.Testate;
+
 public abstract class RequestHandler implements IResponseListener {
 	
 	public void handleRequest() {
@@ -10,6 +12,7 @@ public abstract class RequestHandler implements IResponseListener {
 		HttpHandler httpHandler = new HttpHandler(this);
 		httpHandler.execute(requestParameters);
 	}
+	
 	
 	protected abstract String getURL();
 	

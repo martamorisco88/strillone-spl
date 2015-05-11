@@ -29,10 +29,7 @@ public void createFileBookmarks(String path) throws Exception{
 
 	
 	File BookmarksXml = new File(path);
-	
-    
-	if (!(BookmarksXml.exists())) 
-	        {
+	if (!(BookmarksXml.exists())) {
 
     	Bookmark bookmark =new Bookmark();
         try {   	
@@ -43,15 +40,14 @@ public void createFileBookmarks(String path) throws Exception{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-           }
+    }
 }
 
 public void deleteFileBookmarks(String path){
 	
-
 	File BookmarksXml = new File(path);
-	if (BookmarksXml.exists())
-    {
+	if (BookmarksXml.exists()){
+		
        BookmarksXml.delete();
 	}
 }
@@ -60,43 +56,32 @@ public Bookmark readBookmark(String path){
 	
 	File BookmarksXml = new File(path);
 	Bookmark bookmark = null;
-	
-	if ( BookmarksXml.exists())
-    {
-        try
-        {
+    if ( BookmarksXml.exists()){
+        try {
             Serializer serializer = new Persister();
-            bookmark = serializer.read(Bookmark.class, BookmarksXml);
-            
+            bookmark = serializer.read(Bookmark.class, BookmarksXml);     
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             e.printStackTrace();
         }
     }
-	return bookmark;
-	
+	else bookmark=new Bookmark();
+	return bookmark;	
 }
 
 public void writeBookmark(String path,Bookmark bookmark){
 	
 	File BookmarksXml = new File(path);
 
-	if ( BookmarksXml.exists())
-    {
-        try
-        {
+	if ( BookmarksXml.exists()) {
+        try {
             Serializer serializer = new Persister();
             serializer.write(bookmark, BookmarksXml);
-            
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             e.printStackTrace();
         }
     }
-	
-
 	
 }
 	

@@ -15,7 +15,7 @@ public class Testata {
 	@Element(name="nome")
 	private String nome;
 	
-	@Element(name="edizione")
+	@Element(name="edizione", required=false)
 	private Date edizione;
 	
 	@Element(name="url", required=false)
@@ -31,6 +31,17 @@ public class Testata {
 	private boolean beta; 
 	
 	public Testata() { }
+	
+	public Testata(String id, String nome, String lingua, String url, String resource, Date edizione, boolean beta) {
+		
+		setId(id);
+		setNome(nome);
+		setLingua(lingua);
+		setUrl(url);
+		setResource(resource);
+		setEdizione(edizione);
+		setBeta(beta);
+	}
 
 	public String getLingua() {
 		return lingua;

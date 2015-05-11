@@ -20,6 +20,14 @@ public class Sezione {
 	private List<Articolo> articoli=new ArrayList<Articolo>();
 	
 	public Sezione() { }
+	
+	public Sezione(String id,String nome, List<Articolo> articoli) {
+		
+		setId(id);
+		setNome(nome);
+		setArticoli(articoli);
+	}
+	
 
 	public String getNome() {
 		return nome;

@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -24,7 +25,7 @@ import org.informaticisenzafrontiere.strillone.xml.ArticoloBookmark;
 import org.informaticisenzafrontiere.strillone.xml.Bookmark;
 import org.informaticisenzafrontiere.strillone.xml.FileBookmarks;
 import org.informaticisenzafrontiere.strillone.xml.Giornale;
-import org.informaticisenzafrontiere.strillone.xml.GiornaleBase;
+import org.informaticisenzafrontiere.strillone.xml.GiornaleBookmark;
 import org.informaticisenzafrontiere.strillone.xml.Sezione;
 import org.informaticisenzafrontiere.strillone.xml.Testata;
 import org.informaticisenzafrontiere.strillone.xml.Testate;
@@ -43,26 +44,39 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
+import android.graphics.Point;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
 import android.speech.tts.TextToSpeech.OnUtteranceCompletedListener;
 import android.util.Log;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+import android.view.GestureDetector;
 
-public class MainActivity extends Activity implements IMainActivity, OnInitListener, OnUtteranceCompletedListener, Handler.Callback {
+public class MainActivity extends Activity implements IMainActivity, OnInitListener, OnUtteranceCompletedListener, Handler.Callback,GestureDetector.OnGestureListener, OnTouchListener {
 	
 	private final static String TAG = MainActivity.class.getSimpleName();
-
+	private String bookmarksPath;
+	private final FileBookmarks fileBookmarks = new FileBookmarks();
+    private Bookmark readBookmarks= new Bookmark();
+    
+	private GestureDetector mDetector; 
+	private static final int SWIPE_MIN_DISTANCE = 200;
+	private static final int SWIPE_THRESHOLD_VELOCITY = 200;
+	private String type="normal";
+	
+	
 	enum NavigationLevel {
 		TESTATE, SEZIONI, ARTICOLI;
 	}
 	
-	private String bookmarksPath;
 	private MainPresenter mainPresenter;
 	
 	private TextToSpeech textToSpeech;
@@ -75,6 +89,8 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
 	
 	private Testate testate;
 	private Giornale giornale;
+	private Testate testateComplete;
+	private Testate testateBookmarks;
 	
 	private NavigationLevel navigationLevel;
 	private int iTestata;
@@ -115,8 +131,11 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
         this.upperRightButton = getUpperRightButton();
         this.lowerLeftButton = getLowerLeftButton();
         this.lowerRightButton = getLowerRightButton();
+        
+        View view=(View)findViewById(R.id.view1); 
+        view.setOnTouchListener(this);
+        mDetector = new GestureDetector(this,this);
       
-       final FileBookmarks fileBookmarks = new FileBookmarks();
         try {
         	bookmarksPath=getFilesDir().getPath() + "/bookmark.xml";
         	fileBookmarks.createFileBookmarks(bookmarksPath);
@@ -130,45 +149,59 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
 			public boolean onLongClick(View v) {
 				
                 final FileBookmarks fileBookmarks = new FileBookmarks();
-				Bookmark bookmark = new Bookmark();
-				bookmark=fileBookmarks.readBookmark(bookmarksPath);
-			
+				Bookmark bookmark = fileBookmarks.readBookmark(bookmarksPath);
+				//GiornaleBookmark(String id,String testata, String edizione, String lingua, List<Sezione> sezioni, String resource){
+					
 				
 				switch (navigationLevel) {
 				
 				case TESTATE:
 					if (iTestata >= 0) {
 
-					    GiornaleBase newGiornaleBookmark= new GiornaleBase();
-					    newGiornaleBookmark.setId(MainActivity.this.testate.getTestate().get(iTestata).getId());
-					    newGiornaleBookmark.setTestata(MainActivity.this.testate.getTestate().get(iTestata).getNome());
-					    bookmark.addBookmarkGiornale(newGiornaleBookmark);
+					    GiornaleBookmark newGiornaleBookmark= new  GiornaleBookmark(MainActivity.this.testate.getTestate().get(iTestata).getId(),
+					    		                                                    MainActivity.this.testate.getTestate().get(iTestata).getNome(),
+					    		                                                    MainActivity.this.testate.getTestate().get(iTestata).getEdizione().toString(),
+					    		                                                    MainActivity.this.testate.getTestate().get(iTestata).getLingua(),
+					    		                                                    null,
+					    		                                                    MainActivity.this.testate.getTestate().get(iTestata).getResource() );
+                        bookmark.addBookmarkGiornale(newGiornaleBookmark);
 						fileBookmarks.writeBookmark(bookmarksPath, bookmark);    			
 		    		}
 					break;
 					
 				case SEZIONI:
 					if (iSezione >= 0) {
-                 
-						Sezione newSezioneBookmark= new Sezione();
-						newSezioneBookmark.setNome(MainActivity.this.giornale.getSezioni().get(iSezione).getNome());
-						newSezioneBookmark.setId(MainActivity.this.giornale.getSezioni().get(iSezione).getId());
-				        bookmark.addBookmarkSezione((GiornaleBase) giornale, newSezioneBookmark);    		
+						GiornaleBookmark newGiornaleBookmark= new  GiornaleBookmark(MainActivity.this.testate.getTestate().get(iTestata).getId(),
+													                                 MainActivity.this.testate.getTestate().get(iTestata).getNome(),
+													                                 MainActivity.this.testate.getTestate().get(iTestata).getEdizione().toString(),
+													                                 MainActivity.this.testate.getTestate().get(iTestata).getLingua(),
+													                                 null,
+													                                 MainActivity.this.testate.getTestate().get(iTestata).getResource());
+						Sezione newSezioneBookmark= new Sezione(MainActivity.this.giornale.getSezioni().get(iSezione).getId(),
+																MainActivity.this.giornale.getSezioni().get(iSezione).getNome(),
+																null);
+						bookmark.addBookmarkSezione( newGiornaleBookmark, newSezioneBookmark);    		
 			    		fileBookmarks.writeBookmark(bookmarksPath, bookmark);    			
 			    		
 		    		}
 					break;
 				case ARTICOLI:
 					if (iArticolo >= 0) {
-
-						Calendar data = new GregorianCalendar();
-					    ArticoloBookmark newArticolo=new ArticoloBookmark();
-					    newArticolo.setTesto(MainActivity.this.giornale.getSezioni().get(iSezione).getArticoli().get(iArticolo).getTesto());
-					    newArticolo.setTitolo(MainActivity.this.giornale.getSezioni().get(iSezione).getArticoli().get(iArticolo).getTitolo());
-					    newArticolo.setData(data.getInstance());
-					    bookmark.addBookmarkArticolo((GiornaleBase) giornale,MainActivity.this.giornale.getSezioni().get(iSezione),newArticolo) ;    		
+                           
+						
+						GiornaleBookmark newGiornaleBookmark= new  GiornaleBookmark(MainActivity.this.testate.getTestate().get(iTestata).getId(),
+													                                MainActivity.this.testate.getTestate().get(iTestata).getNome(),
+													                                MainActivity.this.testate.getTestate().get(iTestata).getEdizione().toString(),
+													                                MainActivity.this.testate.getTestate().get(iTestata).getLingua(),
+													                                null,
+													                                MainActivity.this.testate.getTestate().get(iTestata).getResource());
+						Calendar data = new GregorianCalendar();//String titolo, String testo, Date data
+					    ArticoloBookmark newArticolo=new ArticoloBookmark(MainActivity.this.giornale.getSezioni().get(iSezione).getArticoli().get(iArticolo).getTitolo(),
+					    												  MainActivity.this.giornale.getSezioni().get(iSezione).getArticoli().get(iArticolo).getTesto(),
+					    												  /*data.getInstance()*/null);
+					    bookmark.addBookmarkArticolo(newGiornaleBookmark,MainActivity.this.giornale.getSezioni().get(iSezione),newArticolo) ;    		
 			    		fileBookmarks.writeBookmark(bookmarksPath, bookmark);    	
-						}
+					}
 					break;
 				default:
 					break;
@@ -538,7 +571,7 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
     	
     }
     
-    public void performLowerRightAction(View v) {  	
+ public void performLowerRightAction(View v) {  	
     	switch (this.navigationLevel) {
 			case TESTATE:
 				if (this.upperEndTestate) {
@@ -558,7 +591,7 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
 					StringBuilder sb = new StringBuilder();
 					sb.append(testata.getNome());
 					sb.append(", ");
-					sb.append(sdf.format(testata.getEdizione()));
+//					sb.append(sdf.format(testata.getEdizione()));
 					
 					this.textToSpeech.speak(sb.toString(), TextToSpeech.QUEUE_FLUSH, null);
 					
@@ -617,7 +650,12 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
     	}
     	
     }
-
+    
+    
+    
+    public void performLowerRightActionBookmark(View v) { 
+    
+    }
     @Override
 	public void onInit(int status) {
 		if (status == TextToSpeech.SUCCESS) {
@@ -697,6 +735,7 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
         }
 	}
 	
+
 	@Override
 	public String getURLTestata() {
 		Testata testata = (Testata)this.testate.getTestate().get(iTestata);
@@ -718,14 +757,25 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
 		this.navigationLevel = NavigationLevel.SEZIONI;
 		this.iSezione = -1;
 		this.iArticolo = -1;
-		this.maxSezioni = giornale.getSezioni().size();
+		
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append(giornale.getTestata());
 		sb.append(getString(R.string.nav_read_success));
 		if (Configuration.DEBUGGABLE) Log.d(TAG, "sb: " + sb);
+	
+		// this.giornale = giornale;
 		
-		this.giornale = giornale;
+		if (type.equals("normal"))
+	    {    this.giornale = giornale;
+	         Log.i(TAG, "numero sezioni prima "+this.giornale.getSezioni().size());
+		}		
+		else if (type.equals("bookmarks"))
+		{   //this.giornale=readBookmarks.createLiteGiornale(giornale);
+			Log.i(TAG, "numero sezioni dopo "+this.giornale.getSezioni().size());
+		}
+		
+		this.maxSezioni = this.giornale.getSezioni().size();		
 		this.textToSpeech.speak(sb.toString(), TextToSpeech.QUEUE_FLUSH, null);
 	}
 	
@@ -785,8 +835,153 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
 	public boolean handleMessage(Message msg) {
 		return false;
 	}
+
+	@Override
+	public boolean onTouch(View v, MotionEvent event) {
+		int index = event.getActionIndex();
+		int pointerId = event.getPointerId(index)+1;
+		  switch (event.getAction() & MotionEvent.ACTION_MASK) { 
+		    case MotionEvent.ACTION_POINTER_UP:	
+		    {  
+		    if (pointerId==3){
+		    	             
+								try {
+									//openBookmark();
+								} catch (Exception e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+							
+		    	             }  
+		    //if (pointerId==2) closeBookmarks();
+	
+		    }
+		}
+		this.mDetector.onTouchEvent(event);
+	 return true;
+	}
+
+	private void closeBookmarks() 
+	{   changeHeaders(testateComplete);
+	     type="normal";
+		this.textToSpeech.speak("sei uscito dalla modalità preferiti", TextToSpeech.QUEUE_FLUSH, null);
+		
+	}
+	private void openBookmarks() throws Exception 
+	{   
+		readBookmarks=(Bookmark) fileBookmarks.readBookmark(bookmarksPath);
+		testateComplete=testate;
+     	testateBookmarks=readBookmarks.newIndex();
+     	changeHeaders(testateBookmarks);
+     	type="bookmarks";
+		this.textToSpeech.speak("sei entrato nella modalità preferiti", TextToSpeech.QUEUE_FLUSH, null);
+		
+	}
+
+
+	public void changeHeaders(Testate testate) {
+	    this.reloadHeaders = false;
+		this.testate = testate;
+		this.maxTestate = testate.getTestate().size();
+		this.lowerEndTestate = true;
+		this.upperEndTestate = false;
+		resetNavigation();
+	}
+	
+	@Override
+	public boolean onDown(MotionEvent e) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void onShowPress(MotionEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
 	
 	
+	@Override
+	public boolean onSingleTapUp(MotionEvent e) {
+		float x=e.getX();
+		float y=e.getY();
+		int button=detectButton(x,y);
+		switch (button) {
+		case 1: upperLeftButton.performClick();  upperLeftButton.performHapticFeedback(1); break;
+		case 2: upperRightButton.performClick(); upperRightButton.performHapticFeedback(1);break;
+		case 3: lowerLeftButton.performClick();  lowerLeftButton.performHapticFeedback(3); break;
+		case 4: lowerRightButton.performClick(); lowerRightButton.performHapticFeedback(3); break;
+		}	
+		return false;
+	}
+	
+	@Override
+	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
+			float distanceY) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void onLongPress(MotionEvent e) {
+		float x=e.getX();
+		float y=e.getY();
+		int button=detectButton(x,y);
+		switch (button) {
+		case 1: upperLeftButton.performLongClick(); upperLeftButton.performHapticFeedback(0); break;
+		case 2: upperRightButton.performLongClick(); upperRightButton.performHapticFeedback(0); break;
+		case 3: lowerLeftButton.performLongClick(); lowerLeftButton.performHapticFeedback(0); break;
+		case 4: lowerRightButton.performLongClick(); lowerRightButton.performHapticFeedback(0); break;
+		}	
+	}
+
+	@Override
+	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+		float velocityY) {
+		boolean result=false;
+		float offsetX= Math.abs(e1.getX()-e2.getX());
+		float offsetY=Math.abs(e1.getY()-e2.getY());
+		// se è maggiore offset di X considero solo da destra a sinistra e da sinistra a destra. 
+		// se è maggiore offset di Y considero solo da su a giu e da giu a su
+		if (offsetX>offsetY) {  if(e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) { //dx -> sx
+								result=true;
+								closeBookmarks();}  
+								else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) { //sx -> dx
+								result=true;
+								try {
+									openBookmarks();
+								} catch (Exception e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+								}
+		                     } 
+						else {  if(e1.getY() - e2.getY() > SWIPE_MIN_DISTANCE && Math.abs(velocityY) > SWIPE_THRESHOLD_VELOCITY) { // basso -> alt0
+								result=true;
+								}
+								else if (e2.getY() - e1.getY() > SWIPE_MIN_DISTANCE && Math.abs(velocityY) > SWIPE_THRESHOLD_VELOCITY) { //alto -> basso
+								result=true; }}
+		return result;
+	}
+	
+	@SuppressLint("NewApi") 
+    public int detectButton(float x,float y){
+	 Display display = getWindowManager().getDefaultDisplay();
+	 Point size = new Point();
+	 display.getSize(size);
+	 int width = size.x;
+	 int height = size.y;	
+	 int halfwidth = width/2;
+	 int halfheight = height/2;
+	 int button=0;
+	 if ((x<halfwidth) && (y<halfheight)) button=1;
+	 if ((x>halfwidth) && (y<halfheight)) button=2;
+	 if ((x<halfwidth) && (y>halfheight)) button=3;
+	 if ((x>halfwidth) && (y>halfheight)) button=4;
+	 return button;
+	 }
 	
 	
 }

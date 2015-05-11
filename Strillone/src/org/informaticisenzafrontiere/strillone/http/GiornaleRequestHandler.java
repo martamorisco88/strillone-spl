@@ -31,7 +31,7 @@ public class GiornaleRequestHandler extends RequestHandler {
 		//this.url = "http://www.walks.to/strillonews/newspapers/"+url;
 		//this.url = Configuration.URL +  "/newspapers/"+url; //marta
     
-		this.url ="http://192.168.1.139/strillonews/index.php/newspapers/"+url;
+		this.url ="http://192.168.1.195/strillonews/index.php/newspapers/"+url;
 		
 		this.filename = filename;
 	}
@@ -80,7 +80,7 @@ public class GiornaleRequestHandler extends RequestHandler {
 				{
 		        e.toString();
 				this.mainPresenter.notifyCommunicationError(App.getInstance().getString(R.string.connecting_error));
-				Log.i(TAG,"ERRRORE 3"+e.toString());
+				Log.i(TAG,"ERRRORE 3");
 				}
 			}
 		}

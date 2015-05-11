@@ -34,6 +34,7 @@ public class MainPresenter {
 		requestHandler.handleRequest();
 	}
 	
+
 	public void downloadGiornale() {
 		//String urlTestata = this.mainActivity.getURLTestata();
 		String urlTestata = this.mainActivity.getResourceTestata();//marta
@@ -68,6 +69,7 @@ public class MainPresenter {
 	}
 	
 	public void notifyHeadersReceived(Testate testate) {
+		
 		this.mainActivity.notifyHeadersReceived(testate);
 	}
 	
