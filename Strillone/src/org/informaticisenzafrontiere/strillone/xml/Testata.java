@@ -1,5 +1,6 @@
 package org.informaticisenzafrontiere.strillone.xml;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -42,10 +43,28 @@ public class Testata {
 		setEdizione(edizione);
 		setBeta(beta);
 	}
-
-	public String getLingua() {
-		return lingua;
+	
+     public Testata(String id, String nome, String lingua, String url, String resource, String edizione, boolean beta) {
+	
+			setId(id);
+			setNome(nome);
+			setLingua(lingua);
+			setUrl(url);
+			setResource(resource);
+			Date edizioneDate = null;
+			try {
+				edizioneDate = new SimpleDateFormat("yyyy-MM-dd").parse(edizione);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+			e.printStackTrace();
+			}
+			setEdizione(edizioneDate);
+			setBeta(beta);
 	}
+	
+		public String getLingua() {
+			return lingua;
+		}
 
 	public void setLingua(String lingua) {
 		this.lingua = lingua;

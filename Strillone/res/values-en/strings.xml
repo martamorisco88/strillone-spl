@@ -44,4 +44,9 @@
 	<string name="pos_section_selected">Section: %s.\u0020</string>
 	<string name="pos_no_article_selected">No selected article.</string>
 	<string name="pos_article_selected">Article: %s.</string>
+	
+	<string name="bookmarks_mode">You are in the bookmarks mode.</string>
+	<string name="normal_mode">You are in the normal mode.</string>
+	<string name="bookmarks_error">No newspapers favourites.</string>
+	
 </resources>

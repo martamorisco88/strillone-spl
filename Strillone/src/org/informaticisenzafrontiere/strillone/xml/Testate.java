@@ -9,7 +9,7 @@ import org.simpleframework.xml.Root;
 @Root(name="testate")
 public class Testate extends XMLMessage {
 
-	@ElementList(name="testata", type=Testata.class, inline=true)
+	@ElementList(name="testata",inline=true)
 	private List<Testata> testate=new ArrayList<Testata>();
 	
 	public Testate() { }

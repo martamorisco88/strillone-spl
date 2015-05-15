@@ -5,9 +5,11 @@ import java.util.List;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
+import org.simpleframework.xml.Order;
 import org.simpleframework.xml.Root;
 
 @Root(name="sezione")
+@Order(elements={"id", "nome","articolo"})
 public class Sezione {
 	
 	@Element(name="nome", required=false)

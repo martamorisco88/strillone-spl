@@ -1,30 +1,45 @@
 package org.informaticisenzafrontiere.strillone.xml;
 
-import java.util.Calendar;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
-
 import org.simpleframework.xml.Element;
+
 
 public class ArticoloBookmark extends Articolo{
 	
 	
-	@Element(name="data", data=true)
-	private Date data;
+	@Element(name="edizione", data=true)
+	private Date edizione;
 
 	public ArticoloBookmark() { }
 	
-	public ArticoloBookmark(String titolo, String testo, Date data) {
+	public ArticoloBookmark(String titolo, String testo, Date edizione) {
 	
 	 super(titolo,testo);
-	 setData(data);
+	 setEdizione(edizione);
 	}
+	
+	public ArticoloBookmark(String titolo, String testo, String edizione) {
+		
+		 super(titolo,testo);
+		 Date edizioneDate = null;
+		 try {
+			edizioneDate = new SimpleDateFormat("yyyy-MM-dd").parse(edizione);
+		 } catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		 }
+		 setEdizione(edizioneDate);
+		 }
+	
 
 	public Date getData() {
-		return data;
+		return edizione;
 	}
 
-	public void setData(Date data) {
-		this.data=data;
+	public void setEdizione(Date edizione) {
+		this.edizione=edizione;
 	}
 
 

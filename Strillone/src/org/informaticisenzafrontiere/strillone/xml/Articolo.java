@@ -3,9 +3,11 @@ package org.informaticisenzafrontiere.strillone.xml;
 import java.util.Calendar;
 
 import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Order;
 import org.simpleframework.xml.Root;
 
 @Root(name="articolo")
+@Order(elements={"titolo","testo"})
 public class Articolo {
 	
 	@Element(name="titolo", data=true)
