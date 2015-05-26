@@ -1,8 +1,11 @@
 package org.informaticisenzafrontiere.strillone.xml;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.simpleframework.xml.ElementList;
@@ -10,10 +13,11 @@ import org.simpleframework.xml.Root;
 
 import android.util.Log;
 
+import org.informaticisenzafrontiere.strillone.MainActivity;
 import org.informaticisenzafrontiere.strillone.util.Configuration;
 
 @Root(name="bookmark")
-public class Bookmark {
+public class Bookmark implements Cloneable {
 	
 	private final static String TAG = Bookmark.class.getSimpleName();
 	
@@ -35,7 +39,6 @@ public class Bookmark {
 		}
 	
 	public int posGiornaleBookmark(String idGiornale)	{ 
-		
 		int k=-1;
 		boolean trovato=false;
 		while ((k<giornali.size()) && !(trovato)){ 
@@ -85,7 +88,7 @@ public int posArticoloBookmark(String idGiornale, String idSezione, String titol
 			  if (giornali.get(k).getId().equals(idGiornale)){
 				  
 				  exists=true;
-				  if (Configuration.DEBUGGABLE) Log.d(TAG, "Giornale già presente nei preferiti");
+				  if (Configuration.DEBUGGABLE) Log.d(TAG, "Giornale presente nei preferiti");
 			  }
 				 
 			  k++;
@@ -102,7 +105,7 @@ public int posArticoloBookmark(String idGiornale, String idSezione, String titol
 				
 			if (giornali.get(g).getSezioni().get(k).getId().equals(idSezione)) {
 				 exists=true;
-			     if (Configuration.DEBUGGABLE) Log.d(TAG, "Sezione già presente nei preferiti");
+			     if (Configuration.DEBUGGABLE) Log.d(TAG, "Sezione presente nei preferiti");
 			 }
 			 k++;
 		    }
@@ -120,13 +123,11 @@ public int posArticoloBookmark(String idGiornale, String idSezione, String titol
 			int g=this.posGiornaleBookmark(idGiornale);
 			int s=this.posSezioneBookmark(idGiornale, idSezione);
 			int k=0;
-			while ((k<giornali.get(g).getSezioni().get(s).getArticoli().size()) && (!exists)) {
+			while ((k<this.giornali.get(g).getSezioni().get(s).getArticoli().size()) && (!exists)) {
 				
-				if (giornali.get(g).getSezioni().get(s).getArticoli().get(k).getTitolo().equals(titolo)) 
-				 // && (giornali.get(g).getSezioni().get(s).getArticoli().get(k).g.equals(titolo)) )
-				  {
+				if (this.giornali.get(g).getSezioni().get(s).getArticoli().get(k).getTitolo().equals(titolo))  {
 				    exists=true;
-				    if (Configuration.DEBUGGABLE) Log.d(TAG, "Articolo già presente nei preferiti");
+				    if (Configuration.DEBUGGABLE) Log.d(TAG, "Articolo presente nei preferiti");
 				}
 			k++;
 		    }	 
@@ -162,31 +163,33 @@ public int posArticoloBookmark(String idGiornale, String idSezione, String titol
 	}
 	
 			 
-	public void addBookmarkArticolo(GiornaleBookmark giornale,Sezione sezione,Articolo articolo) throws ParseException {   
+	public void addBookmarkArticolo(GiornaleBookmark giornale, Articolo articolo) throws ParseException {
+		
+        Sezione articoliSalvati=new Sezione(calculateHash("bookmark "+giornale.getResource()),"Articoli salvati "+giornale.getTestata(),new ArrayList<Articolo>());
 		
 		if (!this.existsGiornaleBookmark(giornale.getId())) {//manca il giornale, la sezione e l'articolo
-			   Sezione newSezione=new Sezione(sezione.getId(),sezione.getNome(),new ArrayList<Articolo>());
+			 
 			   ArticoloBookmark newArticolo=new ArticoloBookmark(articolo.getTitolo(),
 					   											 articolo.getTesto(),
 					   											 giornale.getEdizione());
-			   newSezione.getArticoli().add(newArticolo);
-			   giornale.getSezioni().add(newSezione);
+			   articoliSalvati.getArticoli().add(newArticolo);
+			   giornale.getSezioni().add(articoliSalvati);
 		       giornali.add(giornale);
 		 }
 		 else {
-			 if (!this.existsSezioneBookmark(giornale.getId(), sezione.getId())){ // manca la sezione e l'articolo
+			 if (!this.existsSezioneBookmark(giornale.getId(),calculateHash("bookmark "+giornale.getResource()))){ // manca la sezione e l'articolo
 				 int g=this.posGiornaleBookmark(giornale.getId());
-		         Sezione newSezione=new Sezione(sezione.getId(),sezione.getNome(), new ArrayList<Articolo>());
+				
 		         ArticoloBookmark newArticolo=new ArticoloBookmark(articolo.getTitolo(),
 							 									  articolo.getTesto(),
 							 									  giornale.getEdizione());
-				 newSezione.getArticoli().add(newArticolo);
-				 giornali.get(g).getSezioni().add(newSezione);
+				 articoliSalvati.getArticoli().add(newArticolo);
+				 giornali.get(g).getSezioni().add(articoliSalvati);
 				 
 			 }
 			 	else {
 				 int g=this.posGiornaleBookmark(giornale.getId());
-			     int s=this.posSezioneBookmark(giornale.getId(), sezione.getId());
+			     int s=this.posSezioneBookmark(giornale.getId(),calculateHash("bookmark "+giornale.getResource()));
 			     ArticoloBookmark newArticolo=new ArticoloBookmark(articolo.getTitolo(),
 							 									   articolo.getTesto(),
 							 									   giornale.getEdizione());
@@ -202,23 +205,43 @@ public int posArticoloBookmark(String idGiornale, String idSezione, String titol
     		this.giornali.remove(this.posGiornaleBookmark(idGiornale));
     		if (Configuration.DEBUGGABLE) Log.d(TAG, "Giornale rimosso dai preferiti");
     	}
+    	
 	}
 	
+    
     public void deleteSezione(String idGiornale,String idSezione) {
     	
     	if(this.existsSezioneBookmark(idGiornale, idSezione)){
-    	giornali.get(this.posGiornaleBookmark(idGiornale)).getSezioni().remove(this.posSezioneBookmark(idGiornale, idSezione));
-    	     if (Configuration.DEBUGGABLE) Log.d(TAG, "Sezione rimossa dai preferiti");       
+    		if (this.getGiornali().get(this.posGiornaleBookmark(idGiornale)).getSezioni().size()==1) 
+    			deleteGiornale(idGiornale);
+    		
+    		else if  (this.getGiornali().get(this.posGiornaleBookmark(idGiornale)).getSezioni().size()>1)
+    			giornali.get(this.posGiornaleBookmark(idGiornale)).getSezioni().remove(this.posSezioneBookmark(idGiornale, idSezione));
+    	     
+    		if (Configuration.DEBUGGABLE) Log.d(TAG, "Sezione rimossa dai preferiti");       
     	}
 	}
 		
-    public void deleteArticolo(String idGiornale,String idSezione,String titolo, String edizione){
-			
+    
+    public void deleteArticolo(String idGiornale, String titolo){
+    	
+    	String idSezione=calculateHash("bookmark "+this.giornali.get(this.posGiornaleBookmark(idGiornale)).getResource());
+
     	if (this.existsArticoloBookmark(idGiornale, idSezione, titolo)){
-	       giornali.get(this.posGiornaleBookmark(idGiornale)).getSezioni().get(this.posSezioneBookmark(idGiornale, idSezione)).getArticoli().
-	       remove(this.posArticoloBookmark(idGiornale, idSezione, titolo));
+    		
+    		if (this.getGiornali().get(this.posGiornaleBookmark(idGiornale)).
+    				getSezioni().get(this.posSezioneBookmark(idGiornale, idSezione)).getArticoli().size()==1 )
+    			this.deleteSezione(idGiornale,idSezione);
+    		else if (this.getGiornali().get(this.posGiornaleBookmark(idGiornale)).
+    				getSezioni().get(this.posSezioneBookmark(idGiornale, idSezione)).getArticoli().size()>1){
+    			
+    			giornali.get(this.posGiornaleBookmark(idGiornale)).getSezioni().get(this.posSezioneBookmark(idGiornale, idSezione)).getArticoli().
+    			remove(this.posArticoloBookmark(idGiornale, idSezione, titolo));
+    			if (Configuration.DEBUGGABLE) Log.d(TAG, "Articolo rimosso dai preferiti");  
+    	   }
 	    }
-    }
+   }
+    
 
 	public Testate newHeadersIndex() {
 
@@ -237,65 +260,114 @@ public int posArticoloBookmark(String idGiornale, String idSezione, String titol
 	return newTestate;
     }
 
-	public Giornale createGiornaleBookmark(Giornale giornale) {
-		
-		Giornale giornaleBookmark= new Giornale();
+	public Giornale createGiornaleBookmark(Giornale giornale) {		
 		int p=this.posGiornaleBookmark(giornale.getId());
-		if ((this.getGiornali().get(p).getSezioni().size() == giornale.getSezioni().size())
+		Giornale bookmark= new Giornale();
+
+		if (((this.getGiornali().get(p).getSezioni().size() == giornale.getSezioni().size())
 		  		 || ((this.getGiornali().get(p).getSezioni().size()==0)))
-		  				 
-		  				 giornaleBookmark=giornale; //tutte le sezioni del giornale sono preferite
+		  		 && !(this.existsSezioneBookmark(this.getGiornali().get(p).getId(), calculateHash("bookmark "+this.getGiornali().get(p).getResource()))))
+		  		 bookmark=giornale; //tutte le sezioni del giornale sono preferite
 		  	
-		  	else if (this.getGiornali().get(p).getSezioni().size() < giornale.getSezioni().size()) {//prendo solo le sezioni preferite
+		  	else if (this.getGiornali().get(p).getSezioni().size() < giornale.getSezioni().size()) { //prendo solo le sezioni preferite
 		  		
-		  		giornaleBookmark= new Giornale(giornale.getId(),giornale.getTestata(),giornale.getEdizione(),giornale.getLingua(),this.getGiornali().get(p).getSezioni());
-		  		
-		  		for (int k=0;k<giornaleBookmark.getSezioni().size();k++){ //riempio gli articoli delle sezioni preferite
-		  			 
+		  		List<Sezione> sezioniPref=new ArrayList<Sezione>();
+		  	    for (int k1=0;k1<this.getGiornali().get(p).getSezioni().size();k1++){ 
+		  	
 		  			boolean trovato=false;
 		  			int j=0;
+		  			
 		  			while (j< giornale.getSezioni().size() && !trovato){
-		  				
-		  				if ( giornaleBookmark.getSezioni().get(k).getId().equals(giornale.getSezioni().get(j).getId())){
-		  					
-		  					trovato=true;
-		  					giornaleBookmark.getSezioni().get(k).setArticoli(giornale.getSezioni().get(j).getArticoli());
-		  					
-		  				}
+		  				if ( this.getGiornali().get(p).getSezioni().get(k1).getId().equals(giornale.getSezioni().get(j).getId())){
+	  					  sezioniPref.add(giornale.getSezioni().get(j));
+	  					 }
 		  				j++;
                     }
+		  			  			
 		  		}
-		  	}
-		  	
-		  	
-	    
-		return giornaleBookmark;  	
+		  		if (this.existsSezioneBookmark(this.getGiornali().get(p).getId(), calculateHash("bookmark "+this.getGiornali().get(p).getResource()))){
+		  		int i=this.posSezioneBookmark(this.getGiornali().get(p).getId(), calculateHash("bookmark "+this.getGiornali().get(p).getResource()));
+		  		sezioniPref.add(this.getGiornali().get(p).getSezioni().get(i));
+		  		}
+		  		bookmark= new Giornale(giornale.getId(),giornale.getTestata(),giornale.getEdizione(),giornale.getLingua(),sezioniPref);
+		    }
+		 
+		 return bookmark;  	
     }
       
 
-	// da completare...
-/*  public void  deleteOldArticoli() {
+  public boolean  deleteOldArticoli() {
 	  
-	  Calendar today = today.getInstance();
+	  Calendar today=Calendar.getInstance();
       long millisecondsToday = today.getTimeInMillis();
-	 
-	  for (int g=0; g<this.giornali.size();g++){ 
-       for (int s=0; s<this.giornali.get(g).getSezioni().size(); s++){ 
-     	  for (int a=0;a<this.giornali.get(g).getSezioni().get(s).getArticoli().size();a++){ 
-                
-				   Calendar cal = Calendar.getInstance();
-				   cal.setTime(this.giornali.get(g).getSezioni().get(s).getArticoli().get(a).getEdizione());
-				   long millisecondsData =cal.getTimeInMillis();
-				   long diff=millisecondsToday-millisecondsData;
-				   long diffDays = diff / (24 * 60 * 60 * 1000);	//differenza in giorni
-				   if (diffDays>=15)  this.giornali.get(g).getSezioni().get(s).getArticoli().remove(a);
-		  }
-			
-	    }
-      }
-  }*/
-	  
+      boolean updateFile=false;
+      int g=0;
+      List<GiornaleBookmark> giornaliBookmark= giornaliBookmark=(List<GiornaleBookmark>) (this.getGiornali()).clone(); // uso questa copia, altrimenti perdo i giornali man mano che cancello
+      while (g<giornaliBookmark.size()){
+    	  boolean existsGiornale=true;
+    	  String idGiornale=giornaliBookmark.get(g).getId();
+		  if (this.existsSezioneBookmark(idGiornale,calculateHash("bookmark "+giornaliBookmark.get(g).getResource()))){
+			  int posSezPref=this.posSezioneBookmark(giornaliBookmark.get(g).getId(),calculateHash("bookmark "+giornaliBookmark.get(g).getResource()));
+			  int a=0;                   
+			  while( existsGiornale && a<giornaliBookmark.get(g).getSezioni().get(posSezPref).getArticoli().size())
+			  {
+				  ArticoloBookmark articolo=(ArticoloBookmark) giornaliBookmark.get(g).getSezioni().get(posSezPref).getArticoli().get(a); // faccio il cast per recuperare la data
+				  Date edizione=articolo.getData();
+	              Calendar cal = Calendar.getInstance();
+	              cal.setTime(edizione);
+	              long millisecondsData =cal.getTimeInMillis();
+	              long diff=millisecondsToday-millisecondsData;
+	              long diffDays = diff / (24 * 60 * 60 * 1000);	//differenza in giorni
+	              if (diffDays>=15) {  	
+	            	  this.deleteArticolo(idGiornale,giornaliBookmark.get(g).getSezioni().get(posSezPref).getArticoli().get(a).getTitolo());
+	            	  if (Configuration.DEBUGGABLE) Log.d(TAG, "Articolo rimosso perchè troppo vecchio.");
+	            	  existsGiornale=this.existsGiornaleBookmark(idGiornale);// verifico che il giornale esista ancora dopo la rimozione
+					  updateFile=true;
+					}	
+				a++;
+				}
+			  }	  
+	  g++;
+	}
+	return updateFile;
+}
+  
+ public String calculateHash(String string){
+    	 
+    	 
+    	MessageDigest md;
+		try {
+			md = MessageDigest.getInstance("SHA-256");
+		
+        md.update(string.getBytes());
  
+        byte byteData[] = md.digest();
+ 
+        //convert the byte to hex format method 1
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < byteData.length; i++) {
+         sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
+        }
+ 
+        string=sb.toString();
+
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return string;
+     } 
+ public Object clone() {
+	 try {
+	 Bookmark b = (Bookmark)super.clone(); // Object.clone copia campo a campo
+	 return b;
+	 } catch (CloneNotSupportedException e) {
+	 // non puo' accadere, ma va comunque gestito
+	 throw new InternalError(e.toString());
+	 }	
+ }	
+	
+	
 }
             
 	

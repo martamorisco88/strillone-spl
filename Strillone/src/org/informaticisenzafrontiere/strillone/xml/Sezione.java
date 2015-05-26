@@ -2,7 +2,6 @@ package org.informaticisenzafrontiere.strillone.xml;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Order;
