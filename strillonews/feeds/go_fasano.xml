@@ -37,7 +37,7 @@
 
 	Tempo stimato di lettura: 1']]></testo>
     </articolo>
-  <id>db8d1268483df03d954307beac707a21973d1bc913aa533e5a51b9ca051de90b</id></sezione>
+  </sezione>
   <sezione>
     <nome>Gli ospiti di GoFasano</nome>
     <articolo>
@@ -82,7 +82,7 @@
 
 	 ]]></testo>
     </articolo>
-  <id>c6bc052bc608955b8ff06f6a72c37e1dd5ee82a17343ae0bb39896d46f0ef3df</id></sezione>
+  </sezione>
   <sezione>
     <nome>Politica</nome>
     <articolo>
@@ -107,5 +107,5 @@
 
 	 ]]></testo>
     </articolo>
-  <id>c2cfe6e792bb5f39e910598287cbf63d316d89e0025eed784f31e5b03dba923a</id></sezione>
-<id>fa030bec9294a23b643a721fbf736e6767c384f9823d0aef6acc476a9f12240d</id></giornale>
+  </sezione>
+</giornale>
