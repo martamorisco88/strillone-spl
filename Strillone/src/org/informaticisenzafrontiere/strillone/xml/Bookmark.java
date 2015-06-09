@@ -24,7 +24,7 @@ public class Bookmark implements Cloneable {
 	public Bookmark(){ 
 	}
 	
-	@ElementList(name="giornale")
+	@ElementList(name="giornali")
     private List<GiornaleBookmark> giornali=new ArrayList<GiornaleBookmark>();
 	
 	
@@ -257,6 +257,7 @@ public int posArticoloBookmark(String idGiornale, String idSezione, String titol
        newTestate.getTestate().add(newTestata);
         
 		}
+        
 	return newTestate;
     }
 
@@ -357,6 +358,7 @@ public int posArticoloBookmark(String idGiornale, String idSezione, String titol
 		}
     	return string;
      } 
+ 
  public Object clone() {
 	 try {
 	 Bookmark b = (Bookmark)super.clone(); // Object.clone copia campo a campo
