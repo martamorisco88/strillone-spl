@@ -25,7 +25,9 @@ function create_newspaper($doc, $lingua, $nome, $edizione, $resource, $id ,$beta
 	$newspaper->appendChild($doc->createElement('nome', $nome));
 	$newspaper->appendChild($doc->createElement('edizione', $edizione));
 	$newspaper->appendChild($doc->createElement('resource', $resource));
-	$newspaper->appendChild($doc->createElement('id', $id));
+	$idAttribute=$doc->createAttribute('id');
+	$idAttribute->value=$id;
+	$newspaper->appendChild($idAttribute);
 	if ($beta)
 		$newspaper->appendChild($doc->createElement('beta', 'true'));
 

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
-<giornale>
+<giornale id="fa030bec9294a23b643a721fbf736e6767c384f9823d0aef6acc476a9f12240d">
   <lingua>it</lingua>
   <testata>Gofasano</testata>
   <edizione>2014-11-15</edizione>
-  <sezione>
+  <sezione id="dea7b98120740ef0a533c75059674048f4d4b2d59c426708dc42cfa89a411d68">
     <nome>Formazione e Lavoro</nome>
     <articolo>
       <titolo><![CDATA[A Fasano  una nuova Scuola di Naturopatia Biointegrata]]></titolo>
@@ -38,7 +38,7 @@
 	Tempo stimato di lettura: 1']]></testo>
     </articolo>
   </sezione>
-  <sezione>
+  <sezione id="358a496ef2c4a35ff6fdfd5f9613212a1367a200a4b7cd974003781d7fc81af3">
     <nome>Gli ospiti di GoFasano</nome>
     <articolo>
       <titolo><![CDATA[Rinnovo degli impegni dei&#8221;Cooperatori di Pozzo Faceto&#8221;]]></titolo>
@@ -83,7 +83,7 @@
 	 ]]></testo>
     </articolo>
   </sezione>
-  <sezione>
+  <sezione id="87cccf0878e0746812b0e12a2de44f3cf9cb41e9e7048053f46391e59904453c">
     <nome>Politica</nome>
     <articolo>
       <titolo><![CDATA[Presentata mozione per la rescissione del contratto con la Tricom-Serti]]></titolo>

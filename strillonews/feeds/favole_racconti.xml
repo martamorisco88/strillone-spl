@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<giornale>
+<giornale id="0071f73370b5127d4d3657c249ed368a3767b83874ec6af8d2f338dd65c96aca">
   <lingua>it</lingua>
   <testata>Favole e Racconti</testata>
   <edizione>2013-05-18</edizione>
-  <sezione>
+  <sezione id="be4acfd4b81d7438ecac2f09ccaad34b377df01a5bb829435918ac52e95ffb1d">
     <nome>Le favole di èsopo, volume 1</nome>
 
       <articolo>
@@ -174,7 +174,7 @@ Morale: La favola mostra che i malvagi sono immutabili, anche se sono trattati c
       </articolo>
 
   </sezione>
-  <sezione>
+  <sezione id="4bda3e9c4f01fc3841445ed1bb5f886fd77b6c030defbb2fd12bdf7a30b36c39">
     <nome>Le favole di èsopo, volume 2</nome>
 	  
       <articolo>
@@ -335,7 +335,7 @@ Sta bene ricambiare generosamente i benefattori, ma bisogna anche guardarsi prud
 
   </sezione>
 
-  <sezione>
+  <sezione id="63ec2e13ad2a01433128d3503d5fe36e518f7d576fcf92577d42554570dd7628">
     <nome>Le favole di èsopo, volume 3</nome>
 
       <articolo>

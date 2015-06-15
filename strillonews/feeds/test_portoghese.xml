@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<giornale>
+<giornale id="c25d503a3cf36b67ecdbf8f5f3b88f180ac7898eceb65eac3be34340d021fa7a">
   <lingua>pt</lingua>
   <testata>Test News</testata>
   <edizione>2012-12-28</edizione>
-  <sezione>
+  <sezione id="3b0fa3c13eeaa3d7908fcd299cce0132c47c2c5fbba2ae835360701ac5040036">
     <nome>Section 1: Test</nome>
     <articolo>
       <titolo><![CDATA[ATITUDE É TUDO]]></titolo>
