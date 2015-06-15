@@ -2,19 +2,21 @@ package org.informaticisenzafrontiere.strillone.xml;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Order;
 import org.simpleframework.xml.Root;
 
 @Root(name="sezione")
-@Order(elements={"id", "nome","articolo"})
+@Order(elements={"nome","articolo"})
 public class Sezione {
 	
 	@Element(name="nome", required=false)
 	private String nome;
 	
-	@Element(name="id", required=false)
+	@Attribute(name="id")
 	private String id;
 	
 	@ElementList(name="articolo",inline=true, required=false)

@@ -163,8 +163,9 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
 				case TESTATE:
 					if (iTestata >= 0) {					
 						if (!modeBookmarks)  {  
-							bookmark.addBookmarkGiornale(newGiornaleBookmark);
+							if (bookmark.addBookmarkGiornale(newGiornaleBookmark))
 							MainActivity.this.textToSpeech.speak(getResources().getString(R.string.insert_newspaper_s_bookmark), TextToSpeech.QUEUE_FLUSH, null);
+							else MainActivity.this.textToSpeech.speak(getResources().getString(R.string.insert_newspaper_s_bookmark_error), TextToSpeech.QUEUE_FLUSH, null);
 						}
 							
 						else  {
@@ -182,8 +183,9 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
 						Sezione newSezioneBookmark= new Sezione(MainActivity.this.giornale.getSezioni().get(iSezione).getId(),
 																MainActivity.this.giornale.getSezioni().get(iSezione).getNome(),
 																new ArrayList<Articolo>());
-						bookmark.addBookmarkSezione(newGiornaleBookmark, newSezioneBookmark);    	
+						if(bookmark.addBookmarkSezione(newGiornaleBookmark, newSezioneBookmark))    	
 						MainActivity.this.textToSpeech.speak(getResources().getString(R.string.insert_section_s_bookmark), TextToSpeech.QUEUE_FLUSH, null);
+						else MainActivity.this.textToSpeech.speak(getResources().getString(R.string.insert_section_s_bookmark_error), TextToSpeech.QUEUE_FLUSH, null);
 						}
 						else  {
 							//la rimozione è concessa solo per le sezioni salvate
@@ -206,13 +208,16 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
 															   MainActivity.this.giornale.getSezioni().get(iSezione).getArticoli().get(iArticolo).getTesto(),
 															   MainActivity.this.giornale.getEdizione()); // da verificare il formato data
 						 try {
-							bookmark.addBookmarkArticolo(newGiornaleBookmark,newArticolo) ;
-							MainActivity.this.textToSpeech.speak(getResources().getString(R.string.insert_article_s_bookmark), TextToSpeech.QUEUE_FLUSH, null);} 
+							if(bookmark.addBookmarkArticolo(newGiornaleBookmark,newArticolo))
+							MainActivity.this.textToSpeech.speak(getResources().getString(R.string.insert_article_s_bookmark), TextToSpeech.QUEUE_FLUSH, null);
+							else MainActivity.this.textToSpeech.speak(getResources().getString(R.string.insert_article_s_bookmark_error), TextToSpeech.QUEUE_FLUSH, null);} 
 						 catch (ParseException e) {	e.printStackTrace(); }
 						 
 					  }	
 						else {//la rimozione è concessa solo per gli articoli salvati
-							if( MainActivity.this.giornale.getSezioni().get(iSezione).getId().equals("bookmark "+newGiornaleBookmark.getResource())){
+							
+							String idSezionePreferiti= bookmark.calculateHash("bookmark "+newGiornaleBookmark.getResource()) ;
+							if( MainActivity.this.giornale.getSezioni().get(iSezione).getId().equals(idSezionePreferiti)){
 							bookmark.deleteArticolo(MainActivity.this.giornale.getId(),MainActivity.this.giornale.getSezioni().get(iSezione).getArticoli().get(iArticolo).getTitolo()); 
 							MainActivity.this.textToSpeech.speak(getResources().getString(R.string.delete_article_s_bookmark), TextToSpeech.QUEUE_FLUSH, null);
 							updateArticles(bookmark,MainActivity.this.giornale.getId(),MainActivity.this.giornale.getSezioni().get(iSezione).getId());

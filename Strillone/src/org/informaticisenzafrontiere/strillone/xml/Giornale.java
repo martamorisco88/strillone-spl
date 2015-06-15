@@ -5,13 +5,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Order;
 import org.simpleframework.xml.Root;
 
 @Root(name="giornale")
-@Order(elements={"id", "testata","edizione","lingua","sezione"})
+@Order(elements={"testata","edizione","lingua","sezione"})
 public class Giornale extends XMLMessage {
 	
 	@Element(name="lingua",required=false)
@@ -26,7 +27,7 @@ public class Giornale extends XMLMessage {
 	@ElementList(name="sezione",required=false, inline=true)
 	private List<Sezione> sezioni= new ArrayList<Sezione>();
 	
-	@Element(name="id")
+	@Attribute(name="id")
 	private String id;
 	
 	public Giornale() { }

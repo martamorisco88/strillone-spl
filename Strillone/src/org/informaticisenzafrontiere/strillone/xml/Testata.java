@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
@@ -25,7 +26,7 @@ public class Testata {
 	@Element(name="resource", required=false)
 	private String resource;
 	
-	@Element(name="id", required=false)
+	@Attribute(name="id", required=false)
 	private String id;
 	
 	@Element(name="beta", required=false)

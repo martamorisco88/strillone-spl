@@ -136,21 +136,26 @@ public int posArticoloBookmark(String idGiornale, String idSezione, String titol
 }
 	
 	
-	public void addBookmarkGiornale(GiornaleBookmark giornale) {
+	public boolean addBookmarkGiornale(GiornaleBookmark giornale) {
 		
+		boolean add=false;
 		if (!this.existsGiornaleBookmark(giornale.getId())){
 			
 			giornali.add(giornale);
+			add=true;
 			if (Configuration.DEBUGGABLE) Log.d(TAG, "Giornale inserito nei preferiti");
 	    }
+		return add;
 	}
 	
-	public void addBookmarkSezione(GiornaleBookmark giornale,Sezione sezione) {
+	public boolean addBookmarkSezione(GiornaleBookmark giornale,Sezione sezione) {
 		
+         boolean add=false;		
 		 if (!this.existsGiornaleBookmark(giornale.getId())) { //manca il giornale e la sezione 
 				
 			 giornale.getSezioni().add(sezione);
 			 giornali.add(giornale);
+			 add=true;
 			 if (Configuration.DEBUGGABLE) Log.d(TAG, "Giornale e sezione inseriti nei preferiti");
 		 }
 		 else   {
@@ -158,23 +163,29 @@ public int posArticoloBookmark(String idGiornale, String idSezione, String titol
 				 int k=this.posGiornaleBookmark(giornale.getId());
 				 giornali.get(k).getSezioni().add(sezione);
 				 if (Configuration.DEBUGGABLE) Log.d(TAG, "Sezione inserita nei preferiti");
+				 add=true;
+			}
+
 		 }
-		 }
+		return add;
 	}
 	
 			 
-	public void addBookmarkArticolo(GiornaleBookmark giornale, Articolo articolo) throws ParseException {
+	public boolean addBookmarkArticolo(GiornaleBookmark giornale, Articolo articolo) throws ParseException {
 		
-        Sezione articoliSalvati=new Sezione(calculateHash("bookmark "+giornale.getResource()),"Articoli salvati "+giornale.getTestata(),new ArrayList<Articolo>());
-		
+		boolean add=false;
+        
 		if (!this.existsGiornaleBookmark(giornale.getId())) {//manca il giornale, la sezione e l'articolo
 			 
+			   Sezione articoliSalvati=new Sezione(calculateHash("bookmark "+giornale.getResource()),"Articoli salvati "+giornale.getTestata(),new ArrayList<Articolo>());
+			
 			   ArticoloBookmark newArticolo=new ArticoloBookmark(articolo.getTitolo(),
 					   											 articolo.getTesto(),
 					   											 giornale.getEdizione());
 			   articoliSalvati.getArticoli().add(newArticolo);
 			   giornale.getSezioni().add(articoliSalvati);
 		       giornali.add(giornale);
+		       add=true;
 		 }
 		 else {
 			 if (!this.existsSezioneBookmark(giornale.getId(),calculateHash("bookmark "+giornale.getResource()))){ // manca la sezione e l'articolo
@@ -183,19 +194,25 @@ public int posArticoloBookmark(String idGiornale, String idSezione, String titol
 		         ArticoloBookmark newArticolo=new ArticoloBookmark(articolo.getTitolo(),
 							 									  articolo.getTesto(),
 							 									  giornale.getEdizione());
+		         Sezione articoliSalvati=new Sezione(calculateHash("bookmark "+giornale.getResource()),"Articoli salvati "+giornale.getTestata(),new ArrayList<Articolo>());
+		 		
 				 articoliSalvati.getArticoli().add(newArticolo);
 				 giornali.get(g).getSezioni().add(articoliSalvati);
+				 add=true;
 				 
 			 }
-			 	else {
+			 	else if (!this.existsArticoloBookmark(giornale.getId(), calculateHash("bookmark "+giornale.getResource()), articolo.getTitolo())){
+			 		
 				 int g=this.posGiornaleBookmark(giornale.getId());
 			     int s=this.posSezioneBookmark(giornale.getId(),calculateHash("bookmark "+giornale.getResource()));
 			     ArticoloBookmark newArticolo=new ArticoloBookmark(articolo.getTitolo(),
 							 									   articolo.getTesto(),
 							 									   giornale.getEdizione());
 			     giornali.get(g).getSezioni().get(s).getArticoli().add(newArticolo);
+			     add=true;
 			 	}
 	         }
+		return add;
    }
 			 
 	
@@ -358,6 +375,7 @@ public int posArticoloBookmark(String idGiornale, String idSezione, String titol
 		}
     	return string;
      } 
+ 
  
  public Object clone() {
 	 try {

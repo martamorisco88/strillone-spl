@@ -48,5 +48,16 @@
 	<string name="bookmarks_mode">You are in the bookmarks mode.</string>
 	<string name="normal_mode">You are in the normal mode.</string>
 	<string name="bookmarks_error">No newspapers favourites.</string>
+	<string name="insert_newspaper_s_bookmark">Newspapers add in favourites.</string>
+	<string name="insert_section_s_bookmark">Section add in favourites.</string>
+	<string name="insert_article_s_bookmark">Article add in favourites.</string>
+	<string name="insert_newspaper_s_bookmark_error">Newspapers exist in favourites.</string>
+	<string name="insert_section_s_bookmark_error">Section exists in favourites.</string>
+	<string name="insert_article_s_bookmark_error">Article exists in favourites.</string>
+	<string name="delete_newspaper_s_bookmark">Newspapers removed from favourites.</string>
+	<string name="delete_section_s_bookmark">Section removed from favourites.</string>
+	<string name="delete_article_s_bookmark">Article removed from favourites.</string>
+	
+	
 	
 </resources>

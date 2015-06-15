@@ -51,6 +51,9 @@
 	<string name="insert_newspaper_s_bookmark">Giornale aggiunto ai preferiti.</string>
 	<string name="insert_section_s_bookmark">Sezione aggiunta ai preferiti.</string>
 	<string name="insert_article_s_bookmark">Articolo aggiunto ai preferiti.</string>
+	<string name="insert_newspaper_s_bookmark_error">Giornale già presente nei preferiti.</string>
+	<string name="insert_section_s_bookmark_error">Sezione già presente nei preferiti.</string>
+	<string name="insert_article_s_bookmark_error">Articolo già presente nei preferiti.</string>
 	<string name="delete_newspaper_s_bookmark">Giornale rimosso dai preferiti.</string>
 	<string name="delete_section_s_bookmark">Sezione rimosso dai preferiti.</string>
 	<string name="delete_article_s_bookmark">Articolo rimosso dai preferiti.</string>
