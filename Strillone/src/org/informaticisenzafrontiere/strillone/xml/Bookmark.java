@@ -190,18 +190,26 @@ public int posArticoloBookmark(String idGiornale, String idSezione, String titol
 		 else {
 			 if (!this.existsSezioneBookmark(giornale.getId(),calculateHash("bookmark "+giornale.getResource()))){ // manca la sezione e l'articolo
 				 int g=this.posGiornaleBookmark(giornale.getId());
+				 
+				 //se il giornale era salvato interamente, inserire tutte le sezioni di origine, a cui si aggiungerà quella dei preferiti
+				 if ((giornali.get(g).getSezioni().size())==0){
+					
+				 List<Sezione> sezioni_originali = giornale.getSezioni();
+				 giornali.get(g).setSezioni(sezioni_originali);
+				 }
 				
 		         ArticoloBookmark newArticolo=new ArticoloBookmark(articolo.getTitolo(),
 							 									  articolo.getTesto(),
 							 									  giornale.getEdizione());
 		         Sezione articoliSalvati=new Sezione(calculateHash("bookmark "+giornale.getResource()),"Articoli salvati "+giornale.getTestata(),new ArrayList<Articolo>());
-		 		
-				 articoliSalvati.getArticoli().add(newArticolo);
+		         articoliSalvati.getArticoli().add(newArticolo);
+					
 				 giornali.get(g).getSezioni().add(articoliSalvati);
 				 add=true;
 				 
 			 }
-			 	else if (!this.existsArticoloBookmark(giornale.getId(), calculateHash("bookmark "+giornale.getResource()), articolo.getTitolo())){
+			 	//manca l'articolo
+			 else if (!this.existsArticoloBookmark(giornale.getId(), calculateHash("bookmark "+giornale.getResource()), articolo.getTitolo())){
 			 		
 				 int g=this.posGiornaleBookmark(giornale.getId());
 			     int s=this.posSezioneBookmark(giornale.getId(),calculateHash("bookmark "+giornale.getResource()));
@@ -265,7 +273,7 @@ public int posArticoloBookmark(String idGiornale, String idSezione, String titol
 		Testate newTestate = new Testate();
 	
         for (int i=0; i<(giornali.size());i++) {
-        	Testata newTestata = new Testata(giornali.get(i).getId(),giornali.get(i).getTestata(),
+        Testata newTestata = new Testata(giornali.get(i).getId(),giornali.get(i).getTestata(),
 					                         giornali.get(i).getLingua(),
 					                         null,
 					                         giornali.get(i).getResource(),
@@ -287,7 +295,8 @@ public int posArticoloBookmark(String idGiornale, String idSezione, String titol
 		  		 && !(this.existsSezioneBookmark(this.getGiornali().get(p).getId(), calculateHash("bookmark "+this.getGiornali().get(p).getResource()))))
 		  		 bookmark=giornale; //tutte le sezioni del giornale sono preferite
 		  	
-		  	else if (this.getGiornali().get(p).getSezioni().size() < giornale.getSezioni().size()) { //prendo solo le sezioni preferite
+		  	else 
+		  		{ //prendo solo le sezioni preferite o tutte più la sezione degli articoli preferiti
 		  		
 		  		List<Sezione> sezioniPref=new ArrayList<Sezione>();
 		  	    for (int k1=0;k1<this.getGiornali().get(p).getSezioni().size();k1++){ 

@@ -1,14 +1,42 @@
 package org.informaticisenzafrontiere.strillone;
 
 
+import java.awt.List;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Locale;
+
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.res.AssetFileDescriptor;
+import android.graphics.Point;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.ToneGenerator;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.os.PowerManager;
+import android.speech.tts.TextToSpeech;
+import android.speech.tts.TextToSpeech.OnInitListener;
+import android.speech.tts.TextToSpeech.OnUtteranceCompletedListener;
+import android.util.Log;
+import android.view.Display;
+import android.view.GestureDetector;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnTouchListener;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import org.informaticisenzafrontiere.strillone.ui.StrilloneButton;
 import org.informaticisenzafrontiere.strillone.ui.StrilloneProgressDialog;
@@ -22,37 +50,6 @@ import org.informaticisenzafrontiere.strillone.xml.GiornaleBookmark;
 import org.informaticisenzafrontiere.strillone.xml.Sezione;
 import org.informaticisenzafrontiere.strillone.xml.Testata;
 import org.informaticisenzafrontiere.strillone.xml.Testate;
-
-
-
-
-import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.media.ToneGenerator;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.os.PowerManager;
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.content.res.AssetFileDescriptor;
-import android.graphics.Point;
-import android.speech.tts.TextToSpeech;
-import android.speech.tts.TextToSpeech.OnInitListener;
-import android.speech.tts.TextToSpeech.OnUtteranceCompletedListener;
-import android.util.Log;
-import android.view.Display;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.View.OnTouchListener;
-import android.widget.LinearLayout;
-import android.widget.Toast;
-import android.view.GestureDetector;
 
 public class MainActivity extends Activity implements IMainActivity, OnInitListener, OnUtteranceCompletedListener, Handler.Callback,GestureDetector.OnGestureListener, OnTouchListener {
 	
@@ -208,6 +205,17 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
 															   MainActivity.this.giornale.getSezioni().get(iSezione).getArticoli().get(iArticolo).getTesto(),
 															   MainActivity.this.giornale.getEdizione()); // da verificare il formato data
 						 try {
+							 //aggiungo le sezioni perchè nell'aggiunta dell'articolo potrebbe servire
+							 
+							 
+							 for (int k=0;k < MainActivity.this.giornale.getSezioni().size();k++)
+							 {
+							 Sezione newSezioneBookmark= new Sezione(MainActivity.this.giornale.getSezioni().get(k).getId(),
+																	MainActivity.this.giornale.getSezioni().get(k).getNome(),
+																	new ArrayList<Articolo>());
+							 newGiornaleBookmark.getSezioni().add(newSezioneBookmark);
+							 }	
+							
 							if(bookmark.addBookmarkArticolo(newGiornaleBookmark,newArticolo))
 							MainActivity.this.textToSpeech.speak(getResources().getString(R.string.insert_article_s_bookmark), TextToSpeech.QUEUE_FLUSH, null);
 							else MainActivity.this.textToSpeech.speak(getResources().getString(R.string.insert_article_s_bookmark_error), TextToSpeech.QUEUE_FLUSH, null);} 
@@ -216,7 +224,7 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
 					  }	
 						else {//la rimozione è concessa solo per gli articoli salvati
 							
-							String idSezionePreferiti= bookmark.calculateHash("bookmark "+newGiornaleBookmark.getResource()) ;
+							String idSezionePreferiti= bookmark.calculateHash("bookmark "+newGiornaleBookmark.getResource());
 							if( MainActivity.this.giornale.getSezioni().get(iSezione).getId().equals(idSezionePreferiti)){
 							bookmark.deleteArticolo(MainActivity.this.giornale.getId(),MainActivity.this.giornale.getSezioni().get(iSezione).getArticoli().get(iArticolo).getTitolo()); 
 							MainActivity.this.textToSpeech.speak(getResources().getString(R.string.delete_article_s_bookmark), TextToSpeech.QUEUE_FLUSH, null);
@@ -502,6 +510,7 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
     public void performUpperRightAction(View v) {
     	switch (this.navigationLevel) {
 			case TESTATE:
+				
 				if (this.lowerEndTestate) {
 					if (this.iTestata >= 0) {
 						// 
@@ -599,7 +608,9 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
     
  public void performLowerRightAction(View v) {  	
     	switch (this.navigationLevel) {
-			case TESTATE:
+			case TESTATE:if (this.modeBookmarks)
+				if (this.modeBookmarks)
+				
 				if (this.upperEndTestate) {
 					this.textToSpeech.speak(getString(R.string.nav_last_header), TextToSpeech.QUEUE_FLUSH, null);
 				} else {
@@ -792,8 +803,10 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
     
 		if (!modeBookmarks)    
 			this.giornale = giornale;
+		//non passa le sezioni!!
         else  this.giornale=readBookmarks.createGiornaleBookmark(giornale);
-     	this.maxSezioni = this.giornale.getSezioni().size();		
+     	
+		this.maxSezioni = this.giornale.getSezioni().size();		
 		this.textToSpeech.speak(sb.toString(), TextToSpeech.QUEUE_FLUSH, null);
 	}
 	
@@ -841,7 +854,7 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
 	public void changeHeaders(Testate testate) {
 	    this.reloadHeaders = false;
 		this.testate = testate;
-		this.maxTestate = testate.getTestate().size();
+		this.maxTestate = testate.getTestate().size();	
 		this.lowerEndTestate = true;
 		this.upperEndTestate = false;
 		resetNavigation();

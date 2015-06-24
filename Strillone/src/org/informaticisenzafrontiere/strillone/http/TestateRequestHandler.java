@@ -30,7 +30,7 @@ public class TestateRequestHandler extends RequestHandler {
 	@Override
 	protected String getURL() {
 		//return Configuration.URL +"/newspapers";
-		return "http://192.168.1.133/strillonews/index.php/newspapers";
+		return "http://192.168.1.27/strillonews/index.php/newspapers";
 	
 		//return "http://www.walks.to/strillone/feeds/testate.php";
 	}
