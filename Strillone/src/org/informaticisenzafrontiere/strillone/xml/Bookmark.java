@@ -37,8 +37,9 @@ public class Bookmark implements Cloneable {
 			
 		this.giornali=giornali;
 		}
-	
-	public int posGiornaleBookmark(String idGiornale)	{ 
+    
+    // Procedura che permette di conoscere la posizione di un giornale preferito all'interno dei Bookmarks
+	public int posGiornaleBookmark(String idGiornale)	{
 		int k=-1;
 		boolean trovato=false;
 		while ((k<giornali.size()) && !(trovato)){ 
@@ -50,6 +51,7 @@ public class Bookmark implements Cloneable {
 	  return k;
 	}
 	
+    // Procedura che permette di conoscere la posizione di una sezione preferito all'interno di un giornale preferito
 	public int posSezioneBookmark(String idGiornale, String idSezione) { 
 		
 		int k=-1;
@@ -64,7 +66,8 @@ public class Bookmark implements Cloneable {
 	 return k;
 	}
 	
-public int posArticoloBookmark(String idGiornale, String idSezione, String titolo) { 
+    // Procedura che permette di conoscere la posizione di un articolo preferito all'interno di un giornale preferito
+    public int posArticoloBookmark(String idGiornale, String idSezione, String titolo) {
 		
 		int k=-1;
 		boolean trovato=false;
@@ -79,7 +82,7 @@ public int posArticoloBookmark(String idGiornale, String idSezione, String titol
 	 return k;
 	}
 	
-
+    // Procedura che permette di verificare la presenza di un giornale preferito all'interno dei Bookmarks
 	public boolean existsGiornaleBookmark(String idGiornale) {
 		
 		boolean exists=false;
@@ -96,6 +99,8 @@ public int posArticoloBookmark(String idGiornale, String idSezione, String titol
 	     return exists;
 	 }
 	
+    
+    // Procedura che permette di verificare la presenza di una sezione preferita all'interno di un giornale preferito
 	public boolean existsSezioneBookmark(String idGiornale,String idSezione) {   
 		
 		boolean exists=false;
@@ -114,7 +119,7 @@ public int posArticoloBookmark(String idGiornale, String idSezione, String titol
 	}
 	    
 
-
+    // Procedura che permette di verificare la presenza di un articolo preferito all'interno di un giornale preferito
 	public boolean existsArticoloBookmark(String idGiornale,String idSezione,String titolo) {
 	
 		boolean exists=false;
@@ -135,7 +140,7 @@ public int posArticoloBookmark(String idGiornale, String idSezione, String titol
 	return exists;     
 }
 	
-	
+    // Procedura che permette di aggiungere un giornale preferito all'interno dei Bookmarks
 	public boolean addBookmarkGiornale(GiornaleBookmark giornale) {
 		
 		boolean add=false;
@@ -148,10 +153,11 @@ public int posArticoloBookmark(String idGiornale, String idSezione, String titol
 		return add;
 	}
 	
+    // Procedura che permette di aggiungere una sezione preferita all'interno di un giornale preferito
 	public boolean addBookmarkSezione(GiornaleBookmark giornale,Sezione sezione) {
 		
          boolean add=false;		
-		 if (!this.existsGiornaleBookmark(giornale.getId())) { //manca il giornale e la sezione 
+		 if (!this.existsGiornaleBookmark(giornale.getId())) { //non è presente il giornale al quale appartiene la sezione che si vuole aggiungere
 				
 			 giornale.getSezioni().add(sezione);
 			 giornali.add(giornale);
@@ -170,7 +176,7 @@ public int posArticoloBookmark(String idGiornale, String idSezione, String titol
 		return add;
 	}
 	
-			 
+	// Procedura che permette di aggiungere un articolo preferito all'interno di un giornale preferito
 	public boolean addBookmarkArticolo(GiornaleBookmark giornale, Articolo articolo) throws ParseException {
 		
 		boolean add=false;
@@ -223,7 +229,7 @@ public int posArticoloBookmark(String idGiornale, String idSezione, String titol
 		return add;
    }
 			 
-	
+	// Procedura che permette di rimuovere un giornale preferito all'interno dei Bookmarks
     public void deleteGiornale(String idGiornale) {
     	
     	if(this.existsGiornaleBookmark(idGiornale)){
@@ -234,20 +240,22 @@ public int posArticoloBookmark(String idGiornale, String idSezione, String titol
 	}
 	
     
+    // Procedura che permette di rimuovere una sezione preferita all'interno di un giornale preferito
     public void deleteSezione(String idGiornale,String idSezione) {
     	
     	if(this.existsSezioneBookmark(idGiornale, idSezione)){
-    		if (this.getGiornali().get(this.posGiornaleBookmark(idGiornale)).getSezioni().size()==1) 
+    		if (this.getGiornali().get(this.posGiornaleBookmark(idGiornale)).getSezioni().size()==1) {// La sezione è unica, quindi va cancellato l'intero giornale
     			deleteGiornale(idGiornale);
+    		}
     		
-    		else if  (this.getGiornali().get(this.posGiornaleBookmark(idGiornale)).getSezioni().size()>1)
+    		else if  (this.getGiornali().get(this.posGiornaleBookmark(idGiornale)).getSezioni().size()>1)// La sezione non è unica, quindi va cancellata solo la sezione
     			giornali.get(this.posGiornaleBookmark(idGiornale)).getSezioni().remove(this.posSezioneBookmark(idGiornale, idSezione));
     	     
     		if (Configuration.DEBUGGABLE) Log.d(TAG, "Sezione rimossa dai preferiti");       
     	}
 	}
 		
-    
+    // Procedura che permette di rimuovere un articolo preferito all'interno di un giornale preferito
     public void deleteArticolo(String idGiornale, String titolo){
     	
     	String idSezione=calculateHash("bookmark "+this.giornali.get(this.posGiornaleBookmark(idGiornale)).getResource());
@@ -329,7 +337,7 @@ public int posArticoloBookmark(String idGiornale, String idSezione, String titol
       long millisecondsToday = today.getTimeInMillis();
       boolean updateFile=false;
       int g=0;
-      List<GiornaleBookmark> giornaliBookmark= giornaliBookmark=(List<GiornaleBookmark>) (this.getGiornali()).clone(); // uso questa copia, altrimenti perdo i giornali man mano che cancello
+      List<GiornaleBookmark> giornaliBookmark= (List<GiornaleBookmark>) (this.getGiornali()).clone(); // uso questa copia, altrimenti perdo i giornali man mano che cancello
       while (g<giornaliBookmark.size()){
     	  boolean existsGiornale=true;
     	  String idGiornale=giornaliBookmark.get(g).getId();

@@ -30,7 +30,7 @@ public class TestateRequestHandler extends RequestHandler {
 	@Override
 	protected String getURL() {
 		//return Configuration.URL +"/newspapers";
-		return "http://192.168.1.27/strillonews/index.php/newspapers";
+		return "http://192.168.1.3/strillonews/index.php/newspapers";
 	
 		//return "http://www.walks.to/strillone/feeds/testate.php";
 	}
@@ -68,7 +68,7 @@ public class TestateRequestHandler extends RequestHandler {
 				
 				this.mainPresenter.notifyHeadersReceived(testate);
 			} catch (Exception e) {
-				// this.mainPresenter.notifyCommunicationError(App.getInstance().getString(R.string.connecting_error));
+				 this.mainPresenter.notifyCommunicationError(App.getInstance().getString(R.string.connecting_error));
 				 this.mainPresenter.notifyErrorDowloadingHeaders(App.getInstance().getString(R.string.connecting_error));
 			}
 		}
