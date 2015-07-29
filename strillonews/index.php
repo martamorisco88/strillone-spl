@@ -8,6 +8,7 @@ $KEY_GO_FASANO = 'go_fasano';
 $KEY_FAVOLE_E_RACCONTI = 'favole_racconti';
 $KEY_TEST_INGLESE = 'test_inglese';
 $KEY_TEST_PORTOGHESE = 'test_portoghese';
+$KEY_ISTRUZIONI_USO = 'istruzioni_uso';
 
 $app = new \Slim\Slim();
 $app->response->headers->set('Content-Type', 'text/xml');
@@ -35,7 +36,7 @@ function create_newspaper($doc, $lingua, $nome, $edizione, $resource, $id ,$beta
 }
 
 function get_newspapers() {
-	global $KEY_REPUBBLICA_IT, $KEY_GO_BARI, $KEY_GO_FASANO, $KEY_FAVOLE_E_RACCONTI, $KEY_TEST_INGLESE, $KEY_TEST_PORTOGHESE;
+	global $KEY_REPUBBLICA_IT, $KEY_GO_BARI, $KEY_GO_FASANO, $KEY_FAVOLE_E_RACCONTI, $KEY_TEST_INGLESE, $KEY_TEST_PORTOGHESE, $KEY_ISTRUZIONI_USO;
 
 	$today = date('Y-m-d');
 	$doc = new DOMDocument('1.0', 'UTF-8');
@@ -47,6 +48,8 @@ function get_newspapers() {
 	$testate->appendChild(create_newspaper($doc, 'it', 'favole e racconti', $today, $KEY_FAVOLE_E_RACCONTI,hash('SHA256', $KEY_FAVOLE_E_RACCONTI)));
 	$testate->appendChild(create_newspaper($doc, 'en', 'test inglese', $today, $KEY_TEST_INGLESE,hash('SHA256',$KEY_TEST_INGLESE)));
 	$testate->appendChild(create_newspaper($doc, 'pt', 'test portoghese', $today, $KEY_TEST_PORTOGHESE,hash('SHA256',$KEY_TEST_PORTOGHESE )));
+	$testate->appendChild(create_newspaper($doc, 'it', 'istruzioni d\'uso strillone', $today, $KEY_ISTRUZIONI_USO,hash('SHA256',$KEY_ISTRUZIONI_USO )));
+	
 	
 	$doc->appendChild($testate);
 	echo $doc->saveXML();
