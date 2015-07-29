@@ -3,68 +3,97 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/upperleft">
-    
-    <LinearLayout android:id="@+id/containerLinearLayout" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical">
-	    <LinearLayout android:id="@+id/firstRowButtonsLinearLayout" android:layout_width="fill_parent" android:layout_height="wrap_content">
-	
-	        <org.informaticisenzafrontiere.strillone.ui.StrilloneButton android:id="@+id/upperLeftButton"
-	    		android:layout_width="0dip"
-	    		android:layout_height="fill_parent"
-			    android:layout_weight="1"
-			    android:contentDescription="@string/cdupperleft"
-			    android:src="@drawable/arrow_home"
-			    android:background="@drawable/upperleft"
-	    		android:onClick="performUpperLeftAction"
-	    		android:clickable="false"
-	    		android:visibility="invisible" />
-	
-			<org.informaticisenzafrontiere.strillone.ui.StrilloneButton android:id="@+id/upperRightButton"
-	    		android:layout_width="0dip"
-	    		android:layout_height="fill_parent"
-	    		android:layout_weight="1"
-				android:contentDescription="@string/cdupperright"
-	    		android:src="@drawable/arrow_up"
-	    		android:background="@drawable/upperright"
-	    		android:onClick="performUpperRightAction"
-	    		android:clickable="false"
-	    		android:visibility="invisible" />
-	        
-	    </LinearLayout>
-	        
-		<LinearLayout android:id="@+id/secondRowButtonsLinearLayout" android:layout_width="fill_parent" android:layout_height="wrap_content">
-		    
-		    <org.informaticisenzafrontiere.strillone.ui.StrilloneButton android:id="@+id/lowerLeftButton"
-	    		android:layout_width="0dip"
-	    		android:layout_height="fill_parent"
-			    android:layout_weight="1"
-			    android:contentDescription="@string/cdlowerleft"
-	    		android:src="@drawable/arrow_enter"
-	    		android:background="@drawable/lowerleft"
-	    		android:onClick="performLowerLeftAction"
-	    		android:clickable="false"
-	    		android:visibility="invisible" />
-	
-			<org.informaticisenzafrontiere.strillone.ui.StrilloneButton android:id="@+id/lowerRightButton"
-	    		android:layout_width="0dip"
-	    		android:layout_height="fill_parent"
-	    		android:layout_weight="1"
-	    		android:contentDescription="@string/cdlowerright"
-	    		android:src="@drawable/arrow_down"
-	    		android:background="@drawable/lowerright"
-	    		android:onClick="performLowerRightAction"
-	    		android:clickable="false"
-	    		android:visibility="invisible" />
-		    
-		</LinearLayout>
-	</LinearLayout>
-	<View
-        android:id="@+id/view1"
+
+    <LinearLayout
+        android:id="@+id/containerLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true" />
-    
-	<ImageView android:id="@+id/navigationArrowsImageView" android:layout_width="200dip" android:layout_height="200dip" android:src="@drawable/marchi" android:layout_centerInParent="true" />
-	
+        android:layout_alignParentTop="true"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/firstRowButtonsLinearLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+
+            <org.informaticisenzafrontiere.strillone.ui.StrilloneButton
+                android:id="@+id/upperLeftButton"
+                android:layout_width="0dip"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:background="@drawable/upperleft"
+                android:clickable="false"
+                android:contentDescription="@string/cdupperleft"
+                android:onClick="performUpperLeftAction"
+                android:src="@drawable/arrow_home"
+                android:visibility="invisible" />
+
+            <org.informaticisenzafrontiere.strillone.ui.StrilloneButton
+                android:id="@+id/upperRightButton"
+                android:layout_width="0dip"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:background="@drawable/upperright"
+                android:clickable="false"
+                android:contentDescription="@string/cdupperright"
+                android:onClick="performUpperRightAction"
+                android:src="@drawable/arrow_up"
+                android:visibility="invisible" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/secondRowButtonsLinearLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+
+            <org.informaticisenzafrontiere.strillone.ui.StrilloneButton
+                android:id="@+id/lowerLeftButton"
+                android:layout_width="0dip"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:background="@drawable/lowerleft"
+                android:clickable="false"
+                android:contentDescription="@string/cdlowerleft"
+                android:onClick="performLowerLeftAction"
+                android:src="@drawable/arrow_enter"
+                android:visibility="invisible" />
+
+            <org.informaticisenzafrontiere.strillone.ui.StrilloneButton
+                android:id="@+id/lowerRightButton"
+                android:layout_width="0dip"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:background="@drawable/lowerright"
+                android:clickable="false"
+                android:contentDescription="@string/cdlowerright"
+                android:onClick="performLowerRightAction"
+                android:src="@drawable/arrow_down"
+                android:visibility="invisible" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/navigationArrowsImageView"
+        android:layout_width="200dip"
+	    android:layout_height="200dip"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/marchi" />
+
+    <View
+        android:id="@+id/touchView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <ImageView
+        android:id="@+id/microphoneImage"
+        android:layout_width="120dip"
+        android:layout_height="120dip"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp"
+        android:src="@drawable/icon_mic" />
 
 </RelativeLayout>

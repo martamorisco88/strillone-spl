@@ -16,11 +16,11 @@
     
     <string name="nav_first_header">Sei alla prima testata.</string>
     <string name="nav_last_header">Sei all\'ultima testata.</string>
-    <string name="nav_use_lower_button_start_navigation_headers">Usa il pulsante in basso a destra per scorrere le testate.</string>
+    <string name="nav_use_lower_button_start_navigation_headers">Utilizza il pulsante in basso a destra per scorrere le testate.</string>
     
     <string name="nav_first_sezione">Sei alla prima sezione.</string>
     <string name="nav_last_sezione">Sei all\'ultima sezione.</string>
-    <string name="nav_use_lower_button_start_navigation_sezioni">Usa il pulsante in basso a destra per scorrere le sezioni.</string>
+    <string name="nav_use_lower_button_start_navigation_sezioni">Utilizza il pulsante in basso a destra per scorrere le sezioni.</string>
     
     <string name="nav_first_articolo">Sei al primo articolo.</string>
     <string name="nav_last_articolo">Sei all\'ultimo articolo.</string>
@@ -44,7 +44,18 @@
 	<string name="pos_section_selected">Sezione: %s.\u0020</string>
 	<string name="pos_no_article_selected">Nessun articolo selezionato.</string>
 	<string name="pos_article_selected">Articolo: %s.</string>
+	
 
+	<string name="start_voice">Pronuncia un comando per interagire con strillone.</string>
+	<string name="unrecognized_command">Comando non valido.</string>
+    <string name="upperLeftString">sali</string>
+	<string name="upperRightString">precedente</string>
+	<string name="lowerLeftString">entra</string>
+	<string name="lowerRightString">successivo</string>
+	<string name="close">chiudi</string>
+	<string name="close_exit">esci</string>
+	<string name="startRecognizer">Riconoscimento vocale avviato.</string>
+	
 	<string name="bookmarks_mode">Sei entrato nella modalità preferiti.</string>
 	<string name="normal_mode">Sei uscito dalla modalità preferiti.</string>
 	<string name="bookmarks_error">Non ci sono giornali preferiti.</string>
@@ -58,7 +69,4 @@
 	<string name="delete_section_s_bookmark">Sezione rimosso dai preferiti.</string>
 	<string name="delete_article_s_bookmark">Articolo rimosso dai preferiti.</string>
 	
-	
-	
-
 </resources>

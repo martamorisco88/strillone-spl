@@ -14,7 +14,6 @@ public interface IMainActivity {
 	public void notifyCommunicationError(String message);
 	
 	public void notifyErrorDowloadingHeaders(String message);
-	
-	public String getResourceTestata();//marta
-//	
+
+	public String getResourceTestata();//Morisco
 }

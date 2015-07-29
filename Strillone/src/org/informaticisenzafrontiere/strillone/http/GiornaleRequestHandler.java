@@ -31,7 +31,7 @@ public class GiornaleRequestHandler extends RequestHandler {
 		//this.url = "http://www.walks.to/strillonews/newspapers/"+url;
 		//this.url = Configuration.URL +  "/newspapers/"+url; //marta
     
-		this.url ="http://192.168.1.3/strillonews/index.php/newspapers/"+url;
+		this.url ="http://192.168.1.46/strillonews/index.php/newspapers/"+url;
 		
 		this.filename = filename;
 	}

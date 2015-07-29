@@ -34,10 +34,10 @@ public class MainPresenter {
 		requestHandler.handleRequest();
 	}
 	
-
 	public void downloadGiornale() {
 		//String urlTestata = this.mainActivity.getURLTestata();
-		String urlTestata = this.mainActivity.getResourceTestata();//marta
+		
+		String urlTestata = this.mainActivity.getResourceTestata();//Morisco
 		
 		// Trova il nome del file.
 		Pattern pattern = Pattern.compile("([^\\/]+)$");
@@ -69,7 +69,6 @@ public class MainPresenter {
 	}
 	
 	public void notifyHeadersReceived(Testate testate) {
-		
 		this.mainActivity.notifyHeadersReceived(testate);
 	}
 	

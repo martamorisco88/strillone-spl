@@ -1,8 +1,6 @@
 package org.informaticisenzafrontiere.strillone;
 
-import java.awt.List;
 import java.io.IOException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,9 +20,6 @@ import org.informaticisenzafrontiere.strillone.xml.Sezione;
 import org.informaticisenzafrontiere.strillone.xml.Testata;
 import org.informaticisenzafrontiere.strillone.xml.Testate;
 
-
-
-
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.ToneGenerator;
@@ -37,34 +32,38 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
+import android.graphics.Color;
 import android.graphics.Point;
+import android.speech.RecognitionListener;
+import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
-import android.speech.tts.TextToSpeech.OnUtteranceCompletedListener;
+import android.speech.tts.UtteranceProgressListener;
 import android.util.Log;
 import android.view.Display;
+import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-import android.view.GestureDetector;
+import 	android.speech.SpeechRecognizer;
+import java.text.ParseException;
 
-public class MainActivity extends Activity implements IMainActivity, OnInitListener, OnUtteranceCompletedListener, Handler.Callback,GestureDetector.OnGestureListener, OnTouchListener {
+
+
+public class MainActivity extends Activity implements IMainActivity, OnInitListener, Handler.Callback, RecognitionListener,GestureDetector.OnGestureListener, OnTouchListener  {
 	
 	private final static String TAG = MainActivity.class.getSimpleName();
-	private String bookmarksPath;
-	private final FileBookmarks fileBookmarks = new FileBookmarks();
-    private Bookmark readBookmarks= new Bookmark();
-    
+	
+
 	private GestureDetector mDetector; 
 	private static final int SWIPE_MIN_DISTANCE = 200;
 	private static final int SWIPE_THRESHOLD_VELOCITY = 200;
-	private boolean modeBookmarks=false;
-	
 	
 	enum NavigationLevel {
 		TESTATE, SEZIONI, ARTICOLI;
@@ -82,8 +81,7 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
 	
 	private Testate testate;
 	private Giornale giornale;
-	private Testate oldTestate;
-	private Testate testateBookmarks;
+
 	
 	private NavigationLevel navigationLevel;
 	private int iTestata;
@@ -93,6 +91,19 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
 	private int maxTestate;
 	private int maxSezioni;
 	private int maxArticoli;
+	
+	private Testate oldTestate;
+	private Testate testateBookmarks;
+	
+	private String bookmarksPath;
+	private final FileBookmarks fileBookmarks = new FileBookmarks();
+    private Bookmark readBookmarks= new Bookmark();
+    
+    private boolean modeBookmarks=false;
+	
+	private ImageView microphone;
+	
+	private View view; 	
 	
 	// Stabilisce se ci si trova all'inizio della navigazione delle testate.
 	private boolean lowerEndTestate;
@@ -107,6 +118,7 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
 	
 	private boolean reloadHeaders = false;
 	
+	
 	private LinkedList<String> sentences;
 	
 	private SimpleDateFormat sdf = new SimpleDateFormat("EEEE dd MMMM yyyy", Locale.getDefault());
@@ -115,20 +127,33 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
 		this.mainPresenter = new MainPresenter(this);
 	}
 	
-    @Override
+	private SpeechRecognizer speechRecognizer; // the speech recognizer
+    private boolean speechRecognizerOn=false;  // state of the speech recognizer. 
+    private HashMap<String, String> params = new HashMap<String, String>(); //textToSpeech.speak function parameter
+	
+
+    @SuppressLint({ "NewApi", "ClickableViewAccessibility" })
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+                
         
         this.upperLeftButton = getUpperLeftButton();
         this.upperRightButton = getUpperRightButton();
         this.lowerLeftButton = getLowerLeftButton();
         this.lowerRightButton = getLowerRightButton();
         
-        View view=(View)findViewById(R.id.view1); 
+        view=(View)findViewById(R.id.touchView); 
         view.setOnTouchListener(this);
         mDetector = new GestureDetector(this,this);
-      
+        view.setBackgroundColor(Color.BLACK);
+        view.setAlpha(0);
+        
+        
+        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(getApplicationContext()); // create the speech recognizer.
+        createMicrophone(); 
+        
+        
         try {
         	bookmarksPath=getFilesDir().getPath() + "/bookmark.xml";
         	fileBookmarks.createFileBookmarks(bookmarksPath);
@@ -142,8 +167,58 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
 		final Bookmark bookmark = fileBookmarks.readBookmark(bookmarksPath);
 		boolean updateFile=bookmark.deleteOldArticoli();
 		if (updateFile)
-			fileBookmarks.writeBookmark(bookmarksPath, bookmark); 
-
+			fileBookmarks.writeBookmark(bookmarksPath, bookmark);
+        
+        
+        MainActivity.this.params.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID,"Strillone"); //add the parametrer 
+        
+        this.upperLeftButton.setOnLongClickListener(new View.OnLongClickListener() {	
+        	
+			public boolean onLongClick(View v) {
+				// Se Ã¨ un testo "splitted" perchÃ© troppo lungo, svuota
+	    		// la code dei messaggi in modo che allo stop non venga
+	    		// riprodotto il messaggio successivo.
+	    		if (MainActivity.this.sentences != null)
+	    			MainActivity.this.sentences.clear();
+				
+				MainActivity.this.textToSpeech.stop();
+				MainActivity.this.textToSpeech.speak(getResources().getString(R.string.nav_closing_app), TextToSpeech.QUEUE_FLUSH, params);
+				
+				Intent startMain = new Intent(Intent.ACTION_MAIN);
+				startMain.addCategory(Intent.CATEGORY_HOME);
+				startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				startActivity(startMain);
+				
+				return true;
+			}
+		});
+        
+        this.lowerLeftButton.setOnLongClickListener(new View.OnLongClickListener() {
+			@Override
+			public boolean onLongClick(View v) {
+				// Se Ã¨ un testo "splitted" perchÃ© troppo lungo, svuota
+	    		// la code dei messaggi in modo che allo stop non venga
+	    		// riprodotto il messaggio successivo.
+	    		/*if (MainActivity.this.sentences != null)
+	    			MainActivity.this.sentences.clear();
+				
+				MainActivity.this.textToSpeech.stop();
+				MainActivity.this.textToSpeech.speak(getResources().getString(R.string.help_text), TextToSpeech.QUEUE_FLUSH, params);
+				*/
+				
+				if (!modeBookmarks){
+	                try {
+						openBookmarks();
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+	                }
+	                else closeBookmarks();
+				
+				return true;
+			}
+		});
         
         
         this.lowerRightButton.setOnLongClickListener(new View.OnLongClickListener() {
@@ -246,51 +321,13 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
 				return true;
 			}
 		});
-      
-  
- 
-        this.upperLeftButton.setOnLongClickListener(new View.OnLongClickListener() {
-			
-			public boolean onLongClick(View v) {
-				// Se è un testo "splitted" perché troppo lungo, svuota
-	    		// la code dei messaggi in modo che allo stop non venga
-	    		// riprodotto il messaggio successivo.
-	    		if (MainActivity.this.sentences != null)
-	    			MainActivity.this.sentences.clear();
-				
-				MainActivity.this.textToSpeech.stop();
-				MainActivity.this.textToSpeech.speak(getResources().getString(R.string.nav_closing_app), TextToSpeech.QUEUE_FLUSH, null);
-				
-				Intent startMain = new Intent(Intent.ACTION_MAIN);
-				startMain.addCategory(Intent.CATEGORY_HOME);
-				startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				startActivity(startMain);
-				
-				return true;
-			}
-		});
         
-        this.lowerLeftButton.setOnLongClickListener(new View.OnLongClickListener() {
-			@Override
-			public boolean onLongClick(View v) {
-				// Se è un testo "splitted" perché troppo lungo, svuota
-	    		// la code dei messaggi in modo che allo stop non venga
-	    		// riprodotto il messaggio successivo.
-	    		if (MainActivity.this.sentences != null)
-	    			MainActivity.this.sentences.clear();
-				
-				MainActivity.this.textToSpeech.stop();
-				MainActivity.this.textToSpeech.speak(getResources().getString(R.string.help_text), TextToSpeech.QUEUE_FLUSH, null);
-				
-				return true;
-			}
-		});
         
         this.upperRightButton.setOnLongClickListener(new View.OnLongClickListener() {
 			
 			@Override
 			public boolean onLongClick(View v) {
-				// Se è un testo "splitted" perché troppo lungo, svuota
+				// Se Ã¨ un testo "splitted" perchÃ© troppo lungo, svuota
 	    		// la code dei messaggi in modo che allo stop non venga
 	    		// riprodotto il messaggio successivo.
 	    		if (MainActivity.this.sentences != null)
@@ -301,7 +338,7 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
 				// Calcola la posizione.
 				StringBuffer sbPosizione = new StringBuffer(getString(R.string.pos_current));
 				if (iTestata < 0) {
-					// Non è stata selezionata alcuna testata.
+					// Non Ã¨ stata selezionata alcuna testata.
 					sbPosizione.append(getString(R.string.pos_no_header_selected));
 				} else {
 					Testata testata = MainActivity.this.testate.getTestate().get(iTestata);
@@ -312,7 +349,7 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
 					sbPosizione.append(". ");
 					
 					if (iSezione < 0) {
-						// Non è stata selezionata alcuna sezione.
+						// Non Ã¨ stata selezionata alcuna sezione.
 						sbPosizione.append(getString(R.string.pos_no_section_selected));
 					} else {
 						Sezione sezione = MainActivity.this.giornale.getSezioni().get(iSezione);
@@ -327,23 +364,60 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
 					}
 				}
 				
-				MainActivity.this.textToSpeech.speak(sbPosizione.toString(), TextToSpeech.QUEUE_FLUSH, null);
+				MainActivity.this.textToSpeech.speak(sbPosizione.toString(), TextToSpeech.QUEUE_FLUSH, params);
 				
 				return true;
-			}
+			}	
+			
+			
+			
+			
+			
 		});
         
         PowerManager pm = (PowerManager)getSystemService(Context.POWER_SERVICE);
 		this.wakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, TAG);
         
+		
+		
         this.textToSpeech = new TextToSpeech(this, this);
-        this.textToSpeech.setOnUtteranceCompletedListener(this);
+        textToSpeech.setOnUtteranceProgressListener(utteranceProgressListener);
+        
     }
+    
+  
+    @SuppressLint("NewApi") UtteranceProgressListener utteranceProgressListener=new UtteranceProgressListener() {
 
+        @Override
+        public void onStart(String utteranceId) {
+            //Log.d(TAG, "onStart ( utteranceId :"+utteranceId+" ) ");
+        }
+
+        @Override
+        public void onError(String utteranceId) {
+            //Log.d(TAG, "onError ( utteranceId :"+utteranceId+" ) ");
+        }
+
+        @Override
+        public void onDone(String utteranceId) {
+        	if (Configuration.DEBUGGABLE) Log.d(TAG, "End of speech!");
+        	if (MainActivity.this.sentences != null) playNextSentence();
+        	                           else {
+        							   MainActivity.this.runOnUiThread(new Runnable() {
+        							   @Override
+        							   public void run() {
+        							   if (speechRecognizerOn) createListener();
+        							   }
+        							   }); }//fine else
+        }
+    };
+    
+    
 	@Override
 	protected void onResume() {
 		super.onResume();
 		this.wakeLock.acquire();
+		// TODO accessibilityEnabled=getAccessibilityEnabled();//to know if talkback is on or off.
 	}
 	
 	@Override
@@ -355,6 +429,7 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
 			this.sentences.clear();
 		}
 		this.textToSpeech.stop();
+		if (SpeechRecognizer.isRecognitionAvailable(getApplicationContext())) {this.speechRecognizer.stopListening(); this.speechRecognizer.destroy();} //mod miky
 		
 		// Rilascia il controllo sullo standby.
 		this.wakeLock.release();
@@ -365,13 +440,14 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
 	protected void onDestroy() {
 		if (Configuration.DEBUGGABLE) Log.d(TAG, "onDestroy()");
 		this.textToSpeech.shutdown();
+		if (SpeechRecognizer.isRecognitionAvailable(getApplicationContext())) {this.speechRecognizer.stopListening(); this.speechRecognizer.destroy();} //mod miky
 		super.onDestroy();
 	}
 
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {
 		super.onWindowFocusChanged(hasFocus);
-		
+	
 		if (hasFocus) {
 			LinearLayout containerLinearLayout = (LinearLayout)findViewById(R.id.containerLinearLayout);
 			int height = containerLinearLayout.getHeight();
@@ -407,15 +483,11 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
 	            return super.onOptionsItemSelected(item);
 	    }
 	}
-	
-//    @Override
-//	public boolean dispatchPopulateAccessibilityEvent(AccessibilityEvent event) {
-//		return true;
-//	}
 
+	//tasto sali
 	public void performUpperLeftAction(View v) {
     	if (this.textToSpeech.isSpeaking()) {
-    		// Se è un testo "splitted" perché troppo lungo, svuota
+    		// Se Ã¨ un testo "splitted" perchÃ© troppo lungo, svuota
     		// la code dei messaggi in modo che allo stop non venga
     		// riprodotto il messaggio successivo.
     		if (this.sentences != null)
@@ -430,19 +502,19 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
 	    		switch (this.navigationLevel) {
 					case TESTATE:
 						resetNavigation();
-			    		this.textToSpeech.speak(getResources().getString(R.string.nav_home), TextToSpeech.QUEUE_FLUSH, null);
+			    		this.textToSpeech.speak(getResources().getString(R.string.nav_home), TextToSpeech.QUEUE_FLUSH, params);
 						break;
 					case SEZIONI:
 						// Passa alla navigazione delle testate.
 						this.navigationLevel = NavigationLevel.TESTATE;
 						this.iSezione = -1;
-						this.textToSpeech.speak(getResources().getString(R.string.nav_go_testate), TextToSpeech.QUEUE_FLUSH, null);
+						this.textToSpeech.speak(getResources().getString(R.string.nav_go_testate), TextToSpeech.QUEUE_FLUSH, params);
 						break;
 					case ARTICOLI:
 						// Passa alla navigazione delle sezioni.
 						this.navigationLevel = NavigationLevel.SEZIONI;
 						this.iArticolo = -1;
-						this.textToSpeech.speak(getResources().getString(R.string.nav_go_sezioni), TextToSpeech.QUEUE_FLUSH, null);
+						this.textToSpeech.speak(getResources().getString(R.string.nav_go_sezioni), TextToSpeech.QUEUE_FLUSH, params);
 						break;
 					default:
 						break;
@@ -452,14 +524,15 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
     	}
     }
     
+	//tasto entra
     public void performLowerLeftAction(View v) {
     	switch (this.navigationLevel) {
 			case TESTATE:
 				if (this.iTestata >= 0) {
 					// Seleziona la testata.
 					startProgressDialog(String.format(getString(R.string.connecting_newspaper), this.testate.getTestate().get(this.iTestata).getNome()));
-					this.mainPresenter.downloadGiornale();
 					
+					this.mainPresenter.downloadGiornale();
 					
 //					this.lowerEndSezioni = true;
 //					this.upperEndSezioni = false;
@@ -479,7 +552,7 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
 		    		sbMessaggio.append(sezione.getNome());
 		    		this.navigationLevel = NavigationLevel.ARTICOLI;
 		    		
-		    		this.textToSpeech.speak(sbMessaggio.toString(), TextToSpeech.QUEUE_FLUSH, null);
+		    		this.textToSpeech.speak(sbMessaggio.toString(), TextToSpeech.QUEUE_FLUSH, params);
 	    		}
 				break;
 			case ARTICOLI:
@@ -489,9 +562,9 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
 		    		Articolo articolo = sezione.getArticoli().get(iArticolo);
 		    		
 		    		if (articolo.getTesto().length() <= Configuration.SENTENCE_MAX_LENGTH) {
-		    			this.textToSpeech.speak(articolo.getTesto(), TextToSpeech.QUEUE_FLUSH, null);
+		    			this.textToSpeech.speak(articolo.getTesto(), TextToSpeech.QUEUE_FLUSH, params);
 		    		} else {
-		    			if (Configuration.DEBUGGABLE) Log.d(TAG, "Testo troppo lungo, splitting...");
+		    			/*if (Configuration.DEBUGGABLE)*/ Log.d(TAG, "Testo troppo lungo, splitting...");
 		    			this.sentences = this.mainPresenter.splitString(articolo.getTesto(), Configuration.SENTENCE_MAX_LENGTH);
 		    			int i = this.sentences.size();
 		    			if (Configuration.DEBUGGABLE) {
@@ -509,16 +582,17 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
     	
     }
     
+    //tasto precedente
     public void performUpperRightAction(View v) {
     	switch (this.navigationLevel) {
 			case TESTATE:
 				if (this.lowerEndTestate) {
 					if (this.iTestata >= 0) {
 						// 
-						this.textToSpeech.speak(getString(R.string.nav_first_header), TextToSpeech.QUEUE_FLUSH, null);
+						this.textToSpeech.speak(getString(R.string.nav_first_header), TextToSpeech.QUEUE_FLUSH, params);
 					} else {
 						// Caso dell'app appena avviata o resettata.
-						this.textToSpeech.speak(getString(R.string.nav_use_lower_button_start_navigation_headers), TextToSpeech.QUEUE_FLUSH, null);
+						this.textToSpeech.speak(getString(R.string.nav_use_lower_button_start_navigation_headers), TextToSpeech.QUEUE_FLUSH, params);
 					}
 				} else {
 					if (!this.upperEndTestate) {
@@ -539,9 +613,8 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
 						sb.append(", ");
 						sb.append(sdf.format(testata.getEdizione()));
 						
-						this.textToSpeech.speak(sb.toString(), TextToSpeech.QUEUE_FLUSH, null);
+						this.textToSpeech.speak(sb.toString(), TextToSpeech.QUEUE_FLUSH, params);
 					}
-					
 					this.upperEndTestate = false;
 				}
 				
@@ -549,9 +622,9 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
 			case SEZIONI:
 				if (this.lowerEndSezioni) {
 					if (this.iSezione >= 0) {
-						this.textToSpeech.speak(getString(R.string.nav_first_sezione), TextToSpeech.QUEUE_FLUSH, null);
+						this.textToSpeech.speak(getString(R.string.nav_first_sezione), TextToSpeech.QUEUE_FLUSH, params);
 					} else {
-						this.textToSpeech.speak(getString(R.string.nav_use_lower_button_start_navigation_sezioni), TextToSpeech.QUEUE_FLUSH, null);
+						this.textToSpeech.speak(getString(R.string.nav_use_lower_button_start_navigation_sezioni), TextToSpeech.QUEUE_FLUSH, params);
 					}
 				} else {
 					if (!this.upperEndSezioni) {
@@ -566,7 +639,7 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
 					
 					if (this.iSezione >= 0) {
 		    			Sezione sezione = this.giornale.getSezioni().get(iSezione);
-		    			this.textToSpeech.speak(sezione.getNome(), TextToSpeech.QUEUE_FLUSH, null);
+		    			this.textToSpeech.speak(sezione.getNome(), TextToSpeech.QUEUE_FLUSH, params);
 		    		}
 		    		
 		    		this.upperEndSezioni = false;
@@ -576,9 +649,9 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
 			case ARTICOLI:
 				if (this.lowerEndArticoli) {
 					if (this.iArticolo >= 0) {
-						this.textToSpeech.speak(getString(R.string.nav_first_articolo), TextToSpeech.QUEUE_FLUSH, null);
+						this.textToSpeech.speak(getString(R.string.nav_first_articolo), TextToSpeech.QUEUE_FLUSH, params);
 					} else {
-						this.textToSpeech.speak(getString(R.string.nav_use_lower_button_start_navigation_articoli), TextToSpeech.QUEUE_FLUSH, null);
+						this.textToSpeech.speak(getString(R.string.nav_use_lower_button_start_navigation_articoli), TextToSpeech.QUEUE_FLUSH, params);
 					}
 				} else {
 					if (!this.upperEndArticoli) {
@@ -594,7 +667,7 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
 					if (this.iArticolo >= 0) {
 			    		Sezione sezione = this.giornale.getSezioni().get(iSezione);
 			    		Articolo articolo = sezione.getArticoli().get(iArticolo);
-			    		this.textToSpeech.speak(articolo.getTitolo(), TextToSpeech.QUEUE_FLUSH, null);
+			    		this.textToSpeech.speak(articolo.getTitolo(), TextToSpeech.QUEUE_FLUSH, params);
 		    		}
 		    		
 		    		this.upperEndArticoli = false;
@@ -607,11 +680,12 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
     	
     }
     
- public void performLowerRightAction(View v) {  	
+    // tasto successivo 
+    public void performLowerRightAction(View v) {  
     	switch (this.navigationLevel) {
 			case TESTATE:
 				if (this.upperEndTestate) {
-					this.textToSpeech.speak(getString(R.string.nav_last_header), TextToSpeech.QUEUE_FLUSH, null);
+					this.textToSpeech.speak(getString(R.string.nav_last_header), TextToSpeech.QUEUE_FLUSH, params);
 				} else {
 					if (!lowerEndTestate || this.iTestata < 0) {
 						if (this.iTestata < this.maxTestate - 1) {
@@ -629,7 +703,7 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
 					sb.append(", ");
 					sb.append(sdf.format(testata.getEdizione()));
 					
-					this.textToSpeech.speak(sb.toString(), TextToSpeech.QUEUE_FLUSH, null);
+					this.textToSpeech.speak(sb.toString(), TextToSpeech.QUEUE_FLUSH, params);
 					
 					this.lowerEndTestate = false;
 				}
@@ -637,7 +711,7 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
 				break;
 			case SEZIONI: {
 					if (this.upperEndSezioni) {
-						this.textToSpeech.speak(getString(R.string.nav_last_sezione), TextToSpeech.QUEUE_FLUSH, null);
+						this.textToSpeech.speak(getString(R.string.nav_last_sezione), TextToSpeech.QUEUE_FLUSH, params);
 					} else {
 						if (!lowerEndSezioni || this.iSezione < 0) {
 							if (this.iSezione < this.maxSezioni - 1) {
@@ -649,7 +723,7 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
 						}
 			    		
 			    		Sezione sezione = this.giornale.getSezioni().get(iSezione);
-			    		this.textToSpeech.speak(sezione.getNome(), TextToSpeech.QUEUE_FLUSH, null);
+			    		this.textToSpeech.speak(sezione.getNome(), TextToSpeech.QUEUE_FLUSH, params);
 			    		
 			    		this.lowerEndSezioni = false;
 					}
@@ -658,7 +732,7 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
 				break;
 			case ARTICOLI: {
 					if (this.upperEndArticoli) {
-						this.textToSpeech.speak(getString(R.string.nav_last_articolo), TextToSpeech.QUEUE_FLUSH, null);
+						this.textToSpeech.speak(getString(R.string.nav_last_articolo), TextToSpeech.QUEUE_FLUSH, params);
 					} else {
 						Sezione sezione = this.giornale.getSezioni().get(iSezione);
 						if (!lowerEndArticoli || this.iArticolo < 0) {
@@ -674,8 +748,7 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
 						}
 						
 						Articolo articolo = sezione.getArticoli().get(iArticolo);
-			    		this.textToSpeech.speak(articolo.getTitolo(), TextToSpeech.QUEUE_FLUSH, null);
-			    		
+			    		this.textToSpeech.speak(articolo.getTitolo(), TextToSpeech.QUEUE_FLUSH, params);
 			    		this.lowerEndArticoli = false;
 					}	
 				}
@@ -686,7 +759,6 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
     	}
     	
     }
-    
     
     
 
@@ -704,10 +776,11 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
 	}
     
 	
-	@Override
+/*	@Override
 	public void onUtteranceCompleted(String utteranceId) {
 		playNextSentence();
-	}
+		Toast.makeText(this, "fine parlato", Toast.LENGTH_SHORT).show();
+	}*/
 	
 	private void playNextSentence() {
 		HashMap<String, String> params = new HashMap<String, String>();
@@ -718,13 +791,13 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
 	@Override
 	public void notifyCommunicationError(String message) {
 		dismissProgressDialog();
-		this.textToSpeech.speak(message, TextToSpeech.QUEUE_FLUSH, null);
+		this.textToSpeech.speak(message, TextToSpeech.QUEUE_FLUSH, params);
 	}
 	
 	@Override
 	public void notifyErrorDowloadingHeaders(String message) {
 		dismissProgressDialog();
-		this.textToSpeech.speak(message, TextToSpeech.QUEUE_FLUSH, null);
+		this.textToSpeech.speak(message, TextToSpeech.QUEUE_FLUSH, params);
 		this.reloadHeaders = true;
 		this.upperLeftButton.setClickable(true);
 	}
@@ -759,7 +832,6 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
 //        toneGenerator.startTone(ToneGenerator.TONE_PROP_BEEP);
         try {
         	AssetFileDescriptor descriptor = getAssets().openFd("jingle.mp3");
-        	
 	        MediaPlayer mediaPlayer = new MediaPlayer();
 	        mediaPlayer.setDataSource(descriptor.getFileDescriptor(), descriptor.getStartOffset(), descriptor.getLength());
 	        mediaPlayer.prepare();
@@ -769,20 +841,20 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
         }
 	}
 	
-
 	@Override
 	public String getURLTestata() {
 		Testata testata = (Testata)this.testate.getTestate().get(iTestata);
 		return testata.getUrl();
 	}
 	
-	//marta
+	//Morisco
 	public String getResourceTestata() {
-			Testata testata = (Testata)this.testate.getTestate().get(iTestata);
-			return testata.getResource();
-			}
-			
+		Testata testata = (Testata)this.testate.getTestate().get(iTestata);
+		return testata.getResource();
+		}
 	
+
+	//Morisco
 	@Override
 	public void notifyGiornaleReceived(Giornale giornale) {
 		if (Configuration.DEBUGGABLE) Log.d(TAG, "notifyGiornaleReceived()");
@@ -805,6 +877,7 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
 		this.textToSpeech.speak(sb.toString(), TextToSpeech.QUEUE_FLUSH, null);
 	}
 	
+	
 	private void resetNavigation() {
 		// Inizializza il livello di navigazione.
 		this.navigationLevel = NavigationLevel.TESTATE;
@@ -822,7 +895,8 @@ public class MainActivity extends Activity implements IMainActivity, OnInitListe
     	this.upperEndArticoli = false;
 	}
 	
-	private void closeBookmarks() {   
+	
+private void closeBookmarks() {   
 		
 		changeHeaders(oldTestate);
 	    modeBookmarks=false;
@@ -888,6 +962,7 @@ public void updateArticles(Bookmark bookmark, String idGiornale, String idSezion
 		 }
 }
 	
+	
 	private StrilloneButton getUpperLeftButton() {
 		return (StrilloneButton)findViewById(R.id.upperLeftButton);
 	}
@@ -918,6 +993,7 @@ public void updateArticles(Bookmark bookmark, String idGiornale, String idSezion
 		}
 	}
 	
+	@SuppressWarnings("unused")
 	private void playTone() {
 		ToneGenerator toneGenerator = new ToneGenerator(AudioManager.STREAM_NOTIFICATION, 100);
         toneGenerator.startTone(ToneGenerator.TONE_PROP_BEEP);
@@ -927,33 +1003,120 @@ public void updateArticles(Bookmark bookmark, String idGiornale, String idSezion
 	public boolean handleMessage(Message msg) {
 		return false;
 	}
+	
+	
+	@Override
+	public void onReadyForSpeech(Bundle params) {
+		showMicrophone();
+		if (Configuration.DEBUGGABLE) Log.i(TAG, "Ready for speech.");	
+	}
+	
+	public void createMicrophone(){
+		microphone = (ImageView) findViewById(R.id.microphoneImage);
+		microphone.setVisibility(View.INVISIBLE);
+	}
+	
+	@SuppressLint("NewApi") public void showMicrophone(){
+		microphone.setVisibility(View.VISIBLE);
+		view.setAlpha(0.8f);
+	}
+	
+	@SuppressLint("NewApi") public void hideMicrophone(){
+		microphone.setVisibility(View.INVISIBLE);
+		view.setAlpha(0);
+	}
 
 	@Override
-	public boolean onTouch(View v, MotionEvent event) {
-		int index = event.getActionIndex();
-		int pointerId = event.getPointerId(index)+1;
-		  switch (event.getAction() & MotionEvent.ACTION_MASK) { 
-		    case MotionEvent.ACTION_POINTER_UP:	
-		    {  
-		    if (pointerId==3){
-		    	               if (!modeBookmarks){
-		    	                try {
-									openBookmarks();
-								} catch (Exception e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}
-		    	                }
-		    	                else closeBookmarks();
-							
-		    	              }  
-		    }
-		}
-		this.mDetector.onTouchEvent(event);
-	 return true;
+	public void onBeginningOfSpeech() {
+		if (Configuration.DEBUGGABLE) Log.i(TAG, "Beginning of speech");
+	}
+
+
+
+	@Override
+	public void onRmsChanged(float rmsdB) {	
+	}
+
+
+
+	@Override
+	public void onBufferReceived(byte[] buffer) {
+		
+	}
+
+
+
+	@Override
+	public void onEndOfSpeech() {
+		if (Configuration.DEBUGGABLE) Log.i(TAG, "End of speech");
+		hideMicrophone();
+	}
+
+
+
+	@Override
+	public void onError(int error) {
+		/* 
+		 1 Network operation timed out
+         2 Other network related errors
+         3 Audio recording error
+         4 Server sends error status
+         5 Other client side errors
+         6 No speech input
+         7 No recognition result matched
+         8 RecognitionService busy
+         9 Insufficient permissions
+         */  
+   		   speechRecognizer.destroy();
+   		   hideMicrophone();
+           if (error==7) createListener(); //on error "7" restart the listener.
+ 	}
+
+	@Override
+	public void onResults(Bundle results) {
+		ArrayList<String> words;
+		String command=null;
+		words = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+		command=words.get(0);
+		 if (command.equalsIgnoreCase(getResources().getString(R.string.upperLeftString))) performUpperLeftAction(upperLeftButton);
+	   		else if (command.equalsIgnoreCase(getResources().getString(R.string.upperRightString))) performUpperRightAction(upperRightButton);
+	   			else if (command.equalsIgnoreCase(getResources().getString(R.string.lowerLeftString))) performLowerLeftAction(lowerLeftButton);
+	   				else if (command.equalsIgnoreCase(getResources().getString(R.string.lowerRightString))) performLowerRightAction(lowerRightButton);
+	   					else if (command.equalsIgnoreCase(getResources().getString(R.string.close))) {speechRecognizer.destroy();speechRecognizerOn=false;}
+	   						else if (command.equalsIgnoreCase(getResources().getString(R.string.close_exit))) {speechRecognizer.destroy();MainActivity.this.finish();speechRecognizerOn=false;}
+	   						 else if (getFromVoice(command));
+	   						 	else MainActivity.this.textToSpeech.speak(getResources().getString(R.string.unrecognized_command), TextToSpeech.QUEUE_FLUSH, params);	
+		speechRecognizer.destroy();  
 	}
 
 	
+
+	@Override
+	public void onPartialResults(Bundle partialResults) {
+		
+	}
+
+
+
+	@Override
+	public void onEvent(int eventType, Bundle params) {
+		
+	}
+	
+	public void createListener(){	
+		 this.textToSpeech.stop();
+		 speechRecognizerOn=true;
+	     speechRecognizer.setRecognitionListener(MainActivity.this);
+	     final Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+	     intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+	     speechRecognizer.startListening(intent); 
+	}
+
+	@Override 
+	public boolean onTouchEvent(MotionEvent event){ 
+	
+	return false;
+	}
 	
 	@Override
 	public boolean onDown(MotionEvent e) {
@@ -967,7 +1130,6 @@ public void updateArticles(Bookmark bookmark, String idGiornale, String idSezion
 		
 	}
 
-	
 	@Override
 	public boolean onSingleTapUp(MotionEvent e) {
 		float x=e.getX();
@@ -993,7 +1155,7 @@ public void updateArticles(Bookmark bookmark, String idGiornale, String idSezion
 		}	
 		return false;
 	}
-	
+
 	@Override
 	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
 			float distanceY) {
@@ -1026,6 +1188,7 @@ public void updateArticles(Bookmark bookmark, String idGiornale, String idSezion
 		}	
 	}
 
+	
 	@Override
 	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 		float velocityY) {
@@ -1034,24 +1197,46 @@ public void updateArticles(Bookmark bookmark, String idGiornale, String idSezion
 		float offsetY=Math.abs(e1.getY()-e2.getY());
 		// se è maggiore offset di X considero solo da destra a sinistra e da sinistra a destra. 
 		// se è maggiore offset di Y considero solo da su a giu e da giu a su
-		if (offsetX>offsetY) {  if(e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) { //dx -> sx
-								result=true;
-								}  
-								else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) { //sx -> dx
-								result=true;
-							}
-		                     } 
-						else {  if(e1.getY() - e2.getY() > SWIPE_MIN_DISTANCE && Math.abs(velocityY) > SWIPE_THRESHOLD_VELOCITY) { // basso -> alt0
-								result=true;
-								}
-								else if (e2.getY() - e1.getY() > SWIPE_MIN_DISTANCE && Math.abs(velocityY) > SWIPE_THRESHOLD_VELOCITY) { //alto -> basso
-								result=true; }}
+		if (offsetX>offsetY) {  if(e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+								speechRecognizer.destroy();speechRecognizerOn=false; hideMicrophone(); result=true; }  
+								else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+									createListener();  result=true; }} 
+						else {  if(e1.getY() - e2.getY() > SWIPE_MIN_DISTANCE && Math.abs(velocityY) > SWIPE_THRESHOLD_VELOCITY) {
+							 result=true;}
+								else if (e2.getY() - e1.getY() > SWIPE_MIN_DISTANCE && Math.abs(velocityY) > SWIPE_THRESHOLD_VELOCITY) {
+								/*createListener();*/ result=true; }}
 		return result;
 	}
+
 	
-	@SuppressLint("NewApi") 
-    public int detectButton(float x,float y){
+	 @Override
+	public boolean onTouch(View v, MotionEvent event) {
+		int index = event.getActionIndex();
+		int pointerId = event.getPointerId(index)+1;
+		  switch (event.getAction() & MotionEvent.ACTION_MASK) { 
+		    case MotionEvent.ACTION_POINTER_UP:	
+		    {  
+		    if (pointerId==3){Toast.makeText(MainActivity.this, "Multitap con 3 dita." ,Toast.LENGTH_SHORT).show();Log.i(TAG,"multitap detected");}  
+		    }
+		}
+		this.mDetector.onTouchEvent(event);
+	 return true;
+	}
 		
+/* TODO	public boolean getAccessibilityEnabled(){
+		boolean accessibilityFound = false;
+		 try {
+		        int accessibilityEnabled = Settings.Secure.getInt(this.getContentResolver(),android.provider.Settings.Secure.ACCESSIBILITY_ENABLED);
+		        if (Configuration.DEBUGGABLE) Log.d(TAG, "ACCESSIBILITY: " + accessibilityEnabled);
+		        if (accessibilityEnabled==1){accessibilityFound=true;}
+		    } catch (SettingNotFoundException e) {
+		    	if (Configuration.DEBUGGABLE) Log.e(TAG, "Error finding setting, default accessibility to not found: " + e.getMessage());
+		    }
+		 return accessibilityFound;
+	}*/
+
+     @SuppressLint("NewApi") 
+     public int detectButton(float x,float y){
 	 Display display = getWindowManager().getDefaultDisplay();
 	 Point size = new Point();
 	 display.getSize(size);
@@ -1074,7 +1259,40 @@ public void updateArticles(Bookmark bookmark, String idGiornale, String idSezion
 	 }
 	 return button;
 	 }
-	
-	
+     
+     public boolean getFromVoice(String name) { 
+    	 boolean trovato=false;
+    	 int k=-1;
+    	 switch (this.navigationLevel) {
+    	 case TESTATE:
+    	 {
+    	 while ((k<MainActivity.this.testate.getTestate().size()-1) && (!trovato)) {
+    		 k++;
+    		 if ((MainActivity.this.testate.getTestate().get(k).getNome().equalsIgnoreCase(name))||
+ 					(MainActivity.this.testate.getTestate().get(k).getNome().contains(name)) &&
+ 					  (name.length()>=(MainActivity.this.testate.getTestate().get(k).getNome().length()/3))
+ 					)trovato=true;
+     	 }
+ 			if (trovato){ MainActivity.this.iTestata=k;
+ 			lowerLeftButton.performClick();
+ 			}
+ 	     } break;
+    	 case SEZIONI:
+    	 {
+    	 	while ((k<MainActivity.this.giornale.getSezioni().size()-1) && (!trovato)) {
+    		k++;
+    			   if (MainActivity.this.giornale.getSezioni().get(k).getNome().equalsIgnoreCase(name))
+    			       trovato=true;
+    			}
+    			if (trovato){ MainActivity.this.iSezione=k;
+    			lowerLeftButton.performClick();
+    			}
+       	 } break;
+    	default: break;
+    	 }
+    return trovato;
+     }
+     
+    
 }
 

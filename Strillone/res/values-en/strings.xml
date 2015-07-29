@@ -45,6 +45,16 @@
 	<string name="pos_no_article_selected">No selected article.</string>
 	<string name="pos_article_selected">Article: %s.</string>
 	
+	<string name="start_voice">Say a command to interact with strillone.</string>
+	<string name="unrecognized_command">Invalid command.</string>
+    <string name="upperLeftString">up</string>
+	<string name="upperRightString">previous</string>
+	<string name="lowerLeftString">enter</string>
+	<string name="lowerRightString">next</string>
+	<string name="close">close</string>
+	<string name="close_exit">exit</string>
+	<string name="startRecognizer">Speech recognition started.</string>
+	
 	<string name="bookmarks_mode">You are in the bookmarks mode.</string>
 	<string name="normal_mode">You are in the normal mode.</string>
 	<string name="bookmarks_error">No newspapers favourites.</string>
@@ -57,7 +67,5 @@
 	<string name="delete_newspaper_s_bookmark">Newspapers removed from favourites.</string>
 	<string name="delete_section_s_bookmark">Section removed from favourites.</string>
 	<string name="delete_article_s_bookmark">Article removed from favourites.</string>
-	
-	
 	
 </resources>

@@ -23,23 +23,25 @@ public final class R {
         public static final int arrow_home=0x7f020002;
         public static final int arrow_up=0x7f020003;
         public static final int icon_app_strillone=0x7f020004;
-        public static final int lowerleft=0x7f020005;
-        public static final int lowerright=0x7f020006;
-        public static final int marchi=0x7f020007;
-        public static final int upperleft=0x7f020008;
-        public static final int upperright=0x7f020009;
+        public static final int icon_mic=0x7f020005;
+        public static final int lowerleft=0x7f020006;
+        public static final int lowerright=0x7f020007;
+        public static final int marchi=0x7f020008;
+        public static final int upperleft=0x7f020009;
+        public static final int upperright=0x7f02000a;
     }
     public static final class id {
-        public static final int beta=0x7f080009;
+        public static final int beta=0x7f08000a;
         public static final int containerLinearLayout=0x7f080000;
         public static final int firstRowButtonsLinearLayout=0x7f080001;
         public static final int lowerLeftButton=0x7f080005;
         public static final int lowerRightButton=0x7f080006;
-        public static final int navigationArrowsImageView=0x7f080008;
+        public static final int microphoneImage=0x7f080009;
+        public static final int navigationArrowsImageView=0x7f080007;
         public static final int secondRowButtonsLinearLayout=0x7f080004;
+        public static final int touchView=0x7f080008;
         public static final int upperLeftButton=0x7f080002;
         public static final int upperRightButton=0x7f080003;
-        public static final int view1=0x7f080007;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
@@ -49,28 +51,32 @@ public final class R {
     }
     public static final class string {
         public static final int app_name=0x7f050000;
-        public static final int bookmarks_error=0x7f050026;
-        public static final int bookmarks_mode=0x7f050024;
+        public static final int bookmarks_error=0x7f05002f;
+        public static final int bookmarks_mode=0x7f05002d;
         public static final int cdlowerleft=0x7f05001c;
         public static final int cdlowerright=0x7f05001d;
         public static final int cdupperleft=0x7f05001a;
         public static final int cdupperright=0x7f05001b;
+        public static final int close=0x7f05002a;
+        public static final int close_exit=0x7f05002b;
         public static final int connecting_error=0x7f050017;
         public static final int connecting_error_reading_newspaper=0x7f050018;
         public static final int connecting_headers=0x7f050015;
         public static final int connecting_newspaper=0x7f050016;
-        public static final int delete_article_s_bookmark=0x7f05002f;
-        public static final int delete_newspaper_s_bookmark=0x7f05002d;
-        public static final int delete_section_s_bookmark=0x7f05002e;
+        public static final int delete_article_s_bookmark=0x7f050038;
+        public static final int delete_newspaper_s_bookmark=0x7f050036;
+        public static final int delete_section_s_bookmark=0x7f050037;
         public static final int help_text=0x7f050019;
         public static final int init_ko=0x7f050005;
         public static final int init_ok=0x7f050004;
-        public static final int insert_article_s_bookmark=0x7f050029;
-        public static final int insert_article_s_bookmark_error=0x7f05002c;
-        public static final int insert_newspaper_s_bookmark=0x7f050027;
-        public static final int insert_newspaper_s_bookmark_error=0x7f05002a;
-        public static final int insert_section_s_bookmark=0x7f050028;
-        public static final int insert_section_s_bookmark_error=0x7f05002b;
+        public static final int insert_article_s_bookmark=0x7f050032;
+        public static final int insert_article_s_bookmark_error=0x7f050035;
+        public static final int insert_newspaper_s_bookmark=0x7f050030;
+        public static final int insert_newspaper_s_bookmark_error=0x7f050033;
+        public static final int insert_section_s_bookmark=0x7f050031;
+        public static final int insert_section_s_bookmark_error=0x7f050034;
+        public static final int lowerLeftString=0x7f050028;
+        public static final int lowerRightString=0x7f050029;
         public static final int menu_beta=0x7f050003;
         public static final int menu_settings=0x7f050002;
         public static final int nav_closing_app=0x7f050008;
@@ -88,14 +94,19 @@ public final class R {
         public static final int nav_use_lower_button_start_navigation_articoli=0x7f050014;
         public static final int nav_use_lower_button_start_navigation_headers=0x7f05000e;
         public static final int nav_use_lower_button_start_navigation_sezioni=0x7f050011;
-        public static final int normal_mode=0x7f050025;
+        public static final int normal_mode=0x7f05002e;
         public static final int pos_article_selected=0x7f050023;
         public static final int pos_current=0x7f05001e;
         public static final int pos_no_article_selected=0x7f050022;
         public static final int pos_no_header_selected=0x7f05001f;
         public static final int pos_no_section_selected=0x7f050020;
         public static final int pos_section_selected=0x7f050021;
+        public static final int startRecognizer=0x7f05002c;
+        public static final int start_voice=0x7f050024;
         public static final int title_activity_main=0x7f050001;
+        public static final int unrecognized_command=0x7f050025;
+        public static final int upperLeftString=0x7f050026;
+        public static final int upperRightString=0x7f050027;
     }
     public static final class style {
         public static final int AppTheme=0x7f060000;
