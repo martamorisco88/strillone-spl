@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<giornale id="69923de23c996f69ba199f2f970d1762c0c2ac08ec0a39a64e99122994685803">
+  <lingua>it</lingua>
+  <testata>Istruzioni d'uso strillone</testata>
+  <edizione>2014-11-15</edizione>
+  <sezione id="6b2c21d5d45c111af8c01f4cc0b06079327f0e65bf090985501d6c1dd9a55eb5">
+    <nome>Istruzioni di navigazione</nome>
+    <articolo>
+      <titolo><![CDATA[Scopri come utilizzare strillone]]></titolo>
+      <testo><![CDATA[Strillone è un'applicazione di Informatici Senza Frontiere che consente di ascoltare, sul proprio smartphone, le notizie del proprio 
+          giornale preferito mediante la sintesi vocale integrata. Utilizzare Strillone è facile e veloce. Tenendo il tuo telefono o tablet tra le mani, 
+          identifica i quattro angoli dello schermo. Ad ognuno di essi è associata un'azione. Angolo superiore sinistro. Tocca brevemente questo angolo per 
+          tornare al livello superiore. Se, ad esempio, stai navigando gli articoli, premendo questo angolo puoi interrompere la lettura dell'articolo. 
+          Premendolo nuovamente puoi tornare alle sezioni del giornale, e così via. Se vuoi chiudere Strillone, premi a lungo questo pulsante e l'applicazione si chiuderà.
+           Angolo inferiore sinistro. Tocca brevemente questo angolo per scendere al livello successivo. Se, ad esempio, stai navigando le sezioni del giornale, premendo questo
+            angolo puoi entrare nella lista degli articoli della sezione scelta. Premendolo nuovamente puoi avviare la lettura dell\'articolo di interesse. 
+            Se vuoi ascoltare nuovamente questa guida, premi a lungo questo pulsante. Angolo superiore destro. 
+            Tocca brevemente questo angolo per passare da una sezione o da un articolo al precedente. Angolo inferiore destro. 
+            Tocca brevemente questo angolo per passare da una sezione o da un articolo al successivo. Per riascoltare questa guida, premi a lungo l'angolo inferiore sinistro.
+]]></testo>
+    </articolo>
+  </sezione>
+  <sezione id="d63eca3000a002d97a87daef6de9255a6d2ee93d4b33b5a4f21b7b7f8bd75d33">
+    <nome>Istruzioni per bookmarks</nome>
+    <articolo>
+      <titolo><![CDATA[Scopri come utilizzare i preferiti in iOS]]></titolo>
+      <testo><![CDATA[Per segnare come preferita una testata o una sezione, posizionati sulla sezione e premi il pulsante successivo (angolo inferiore destro) a lungo.
+Per entrare nella modalità preferiti effettua un doppio tap con due dita su qualsiasi punto dello schermo, se voice over è attivo. Altrimenti tocca con due dita due punti 
+qualsiasi dello schermo.
+Nella modalità preferiti puoi navigare come nella modalità normale.
+Per rimuovere una testata o una sezione dai preferiti, posizionati su di essa (nella modalità preferiti) e premi a lungo il tasto successivo (angolo inferiore destro).
+Per uscire dalla modalità preferiti effettua un doppio tap con due dita su qualsiasi punto dello schermo. se voice over è attivo. Altrimenti tocca con due dita due punti 
+qualsiasi dello schermo.
+	 ]]></testo>
+    </articolo>
+     <articolo>
+     <titolo><![CDATA[Scopri come utilizzare i preferiti in Android]]></titolo>
+     <testo><![CDATA[Per segnare come preferita una testata, una sezione o un articolo posizionati su di esso e premi il pulsante successivo (angolo inferiore destro) a lungo.
+Per entrare nella modalità preferiti premi il tasto entra (angolo inferiore sinistro) a lungo.
+Nella modalità preferiti puoi navigare come nella modalità normale.
+Per rimuovere una testata o una sezione dai preferiti, posizionati su di essa (nella modalità preferiti) e premi a lungo il tasto successivo (angolo inferiore destro).
+Per uscire dalla modalità preferiti premi il tasto entra (angolo inferiore sinistro) a lungo.
+	 ]]></testo>
+    </articolo>
+     <articolo>
+     <titolo><![CDATA[Scopri come utilizzare i preferiti in Windows Phone]]></titolo>
+     <testo><![CDATA[Per segnare come preferita una testata o una sezione, posizionati sulla sezione e premi il pulsante successivo (angolo inferiore destro) a lungo.
+Per entrare nella modalità preferiti premi il tasto entra (angolo inferiore sinistro) a lungo.
+Nella modalità preferiti puoi navigare come nella modalità normale.
+Per rimuovere una testata o una sezione dai preferiti, posizionati su di essa (nella modalità preferiti) e premi a lungo il tasto successivo (angolo inferiore destro).
+Per uscire dalla modalità preferiti premi il tasto entra (angolo inferiore sinistro) a lungo.
+	 ]]></testo>
+    </articolo>
+  </sezione>
+  <sezione id="a73c2e9a2614e3689047327eb192c082564cb37c71c094b571f629165a0426f5">
+    <nome>Istruzioni riconoscimento vocale</nome>
+    <articolo>
+      <titolo><![CDATA[Scopri come utilizzare il riconoscimento vocale]]></titolo>
+      <testo><![CDATA[Per avviare il riconoscimento vocale trascina tre dita in orizzontale da sinistra a destra dello schermo. 
+Dopo il segnale acustico pronuncia il comando che desideri utilizzare scegliendo tra:
+sali o indietro, per il tasto nell'angolo superiore sinistro.
+precedente o su, per il tasto nell'angolo superiore destro.
+entra, per il tasto nell'angolo inferiore sinistro.
+successivo o giù, per il tasto nell'angolo inferiore destro.
+chiudi, per chiudere il riconoscimento vocale.
+esci per chiudere il riconoscimento vocale e uscire dall'applicazione.
+	 ]]></testo>
+    </articolo>
+  </sezione>
+</giornale>
